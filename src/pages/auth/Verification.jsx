@@ -1,0 +1,34 @@
+import { Link } from 'react-router-dom';
+import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import AuthSidebar from '../../components/authSidebar/AuthSidebar';
+
+const Verification = () => {
+    return (
+        <div className="flex flex-col md:flex-row min-h-screen relative">
+            <AuthSidebar />
+            <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-2 sm:p-6 relative">
+                <img src={loveIcon} className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
+                <img src={loveIcon} className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
+
+                <div className="w-full max-w-md bg-[#FFEFF1] rounded-2xl px-8 py-8 md:px-12 md:py-12 text-center border border-pink-100 mt-5 sm:0">
+                    <h2 className="text-[32px] font-bold text-[#B6003F] mb-4">
+                        Enter Verification Code
+                    </h2>
+                    {/* verification code here */}
+                    <div className="space-y-4">
+                        <button className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer outline-0">
+                            <span className="font-medium text-lg text-[#FFFFFF]">Continue</span>
+                        </button>
+
+                    </div>
+
+                    <p className="mt-8 text-[#58001C]">
+                        Already have an account? <Link to="/" className="text-[#FF225E] font-bold hover:underline">Sign in</Link>
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Verification;
