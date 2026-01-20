@@ -1,6 +1,8 @@
 import { ChevronDown, Map, MapPin } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import HeadingTitle from "../../components/home/HeadingTitle";
+import loveIcon from '../../assets/images/svg/loveIcon.svg';
 
 const ProfileCreate = () => {
     const [candidateType, setCandidateType] = useState('candidate');
@@ -15,14 +17,10 @@ const ProfileCreate = () => {
     return (
         <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center px-6 pt-10 pb-20">
             <div className="max-w-7xl w-full rounded-3xl">
-                <div className="text-center mb-10 max-w-157.5 mx-auto">
-                    <h1 className="text-[32px] font-semibold text-[#58001C] mb-2">
-                        Create Your Profile and Start Finding Your Perfect Match
-                    </h1>
-                    <p className="text-gray-500 text-base max-w-xl mx-auto">
-                        Fill in the details below to create your personalized profile. This will help us recommend matches tailored to your preferences and values.
-                    </p>
-                </div>
+                <HeadingTitle />
+
+                <img src={loveIcon} className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
+                <img src={loveIcon} className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
                     <section>

@@ -4,25 +4,25 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
-        { name: 'Matches', href: '#', active: true },
-        { name: 'Discover', href: '#' },
-        { name: 'Chat', href: '#' },
-        { name: 'Marriage Counselling', href: '#' },
-        { name: 'Contact', href: '#' },
+        { name: 'Register', href: '/register', active: true },
+        { name: 'PhoneNumber', href: '/phonenumber' },
+        { name: 'Verification', href: '/verfication' },
+        { name: 'Createprofile', href: '/createprofile' },
+        { name: 'TypeSelected', href: '/typeselected' },
+        { name: 'UploadPhoto', href: '/profileupload' },
+        { name: 'FaceQRCode', href: '/faceqrcode' },
     ];
 
     return (
         <nav className="bg-[#FFF1F3] px-4 py-4 md:px-12 shadow-sm sticky top-0 z-50">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-                {/* Left Side: Logo */}
                 <div className="flex items-center">
                     <div className="bg-[#FF2D55] text-white px-6 py-2 rounded-md font-bold text-xl cursor-pointer">
                         Logo
                     </div>
                 </div>
 
-                {/* Center: Desktop Navigation Links */}
                 <div className="hidden lg:flex items-center space-x-8">
                     {navLinks.map((link) => (
                         <a
@@ -36,7 +36,6 @@ const Navbar = () => {
                     ))}
                 </div>
 
-                {/* Right Side: Actions (Desktop) */}
                 <div className="hidden lg:flex items-center space-x-6">
                     <button className="bg-[#F0B90B] hover:bg-[#D9A608] text-white px-5 py-2 rounded-xl flex items-center space-x-2 font-bold shadow-sm transition-all">
                         <span className="text-lg">👑</span>
@@ -62,7 +61,6 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {/* Mobile Menu Button */}
                 <div className="lg:hidden flex items-center">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
@@ -75,7 +73,6 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobile Drawer */}
             {isOpen && (
                 <div className="lg:hidden mt-4 bg-white rounded-2xl p-6 shadow-xl border border-pink-100 absolute left-4 right-4 animate-in slide-in-from-top duration-300">
                     <div className="flex flex-col space-y-4">
@@ -95,7 +92,6 @@ const Navbar = () => {
                             <span>Upgrade</span>
                         </button>
                         <div className="flex justify-around pt-2 text-[#8E1B3E]">
-                            {/* User/Notification Icons for mobile */}
                             <span>🔔 Notification</span>
                             <span>👤 Profile</span>
                         </div>

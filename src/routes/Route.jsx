@@ -8,6 +8,10 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import PhoneNumber from "../pages/auth/PhoneNumber";
 import Verification from "../pages/auth/Verification";
 import ProfileCreate from "../pages/profile/ProfileCreate";
+import TypeSelected from "../pages/profile/TypeSelected";
+import ProfileUpload from "../pages/profile/ProfileUpload";
+import FaceQrCode from "../pages/profile/FaceQrCode";
+import VerificationComplete from "../pages/profile/VerificationComplete";
 
 const router = createBrowserRouter([
     {
@@ -32,13 +36,29 @@ const router = createBrowserRouter([
                 element: <Verification />
             },
             {
+                path: "/createprofile",
+                element: <ProfileCreate />
+            },
+            {
+                path: "/typeselected",
+                element: <TypeSelected />
+            },
+            {
+                path: "/profileupload",
+                element: <ProfileUpload />
+            },
+            {
+                path: "/faceqrcode",
+                element: <FaceQrCode />
+            },
+            {
+                path: "/verificationcomplete",
+                element: <VerificationComplete />
+            },
+            {
                 path: "/testing",
                 element: <Testing />
             },
-            {
-                path: "createprofile",
-                element: <ProfileCreate />
-            }
         ],
     },
     {
