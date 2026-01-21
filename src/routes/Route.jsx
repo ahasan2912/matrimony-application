@@ -14,6 +14,7 @@ import FaceQrCode from "../pages/profile/FaceQrCode";
 import VerificationComplete from "../pages/profile/VerificationComplete";
 import Matches from "../pages/matches/Matches";
 import Discover from "../pages/discover/Discover";
+import ChatList from "../pages/chat/ChatList";
 
 const router = createBrowserRouter([
     {
@@ -65,7 +66,10 @@ const router = createBrowserRouter([
                 path: "/discover",
                 element: <Discover />
             },
-
+            {
+                path: "/chatlist",
+                element: <ChatList />
+            },
             {
                 path: "/testing",
                 element: <Testing />

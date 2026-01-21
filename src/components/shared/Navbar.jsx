@@ -8,6 +8,7 @@ const Navbar = () => {
         { name: 'Register', href: '/register', active: true },
         { name: 'Mathces', href: '/metches', active: true },
         { name: 'Discover', href: '/discover', active: true },
+        { name: 'Chat', href: '/chatlist', active: true },
     ];
 
     return (
