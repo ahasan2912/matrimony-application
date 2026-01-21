@@ -63,3 +63,12 @@ export const selectePersonalInterest = [
         items: ["Outgoing 😎", "Introverted 🧑‍💻", "Creative 🧠", "Honest 🤥", "Sensitive 🥺", "Romantic 💘", "Loyal 🦁", "Confident 💪", "Calm/Patient 🧘‍♂️", "Adventurous 📚", "Empathetic 💞", "Funny 😂", "Independent 🏃‍♂️", "Hard-working 💪", "Spontaneous 🎉", "Social 🐝", "Supportive 🦸‍♀️", "Pragmatic 🤔", "Intellectual 🧠", "Compassionate 🧑‍🦰", "Goal-Oriented 🎯", "Organized 📅", "Easy-going 😇"]
     }
 ]
+
+export const interestsItem = ['Basketball 🏀', 'Pets 🐱', 'History 📜', 'Styling 👗', 'Swimming 🏊', 'Astrology ✨', 'Abroad ✈️', 'Cycling 🚴', 'Cycling 🚴', 'Non-Fiction 📚', 'Cycling 🚴', 'Abroad ✈️', 'Non-Fiction 📚', 'Cycling 🚴', 'Listening to Music 🎧'];
+
+export  const images = [
+    "https://t4.ftcdn.net/jpg/09/75/07/11/360_F_975071103_e99E3iSot86QtdT8vRJUyTOYao83XxRB.jpg",
+    "https://www.gethucinema.com/wp-content/uploads/2025/02/Dur-e-Fishan-Saleem-52-UsFebW3583.jpg",
+    "https://outspoken.newagebd.com/files/img/202509/973c08360b8ad3917ef2c56f57e6daf1.jpg",
+    "https://i.pinimg.com/736x/05/49/a5/0549a5169fd3f274441ef7aff2b73bda.jpg",
+  ];

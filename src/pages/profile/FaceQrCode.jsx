@@ -1,8 +1,13 @@
-import images from '../../assets/image';
+import { useNavigate } from 'react-router-dom';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import LoveBackground from '../../components/shared/LoveBackground';
+import { images } from '../../assets/image';
 
 const FaceQrCode = () => {
+    const navigate = useNavigate();
+    const handleClickContinue = () => {
+        navigate('/verificationcomplete');
+    }
     return (
         <div className='min-h-screen bg-[#FFFFFF] px-6 pt-10 pb-20'>
             <div className='max-w-7xl mx-auto w-full rounded-3xl'>
@@ -50,8 +55,15 @@ const FaceQrCode = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="flex justify-center mt-10">
+                        <button
+                            onClick={handleClickContinue}
+                            type="submit"
+                            className="bg-[#b3003b] hover:bg-[#8e002f] text-white font-bold py-3 sm:py-3.5 px-16 rounded-full transition-colors duration-200 shadow-lg w-full sm:w-auto">
+                            Continue
+                        </button>
+                    </div>
                 </div>
-
             </div>
         </div>
     );

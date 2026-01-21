@@ -3,13 +3,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import HeadingTitle from "../../components/home/HeadingTitle";
 import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import { useNavigate } from "react-router-dom";
 
 const ProfileCreate = () => {
     const [candidateType, setCandidateType] = useState('candidate');
     const { register, handleSubmit } = useForm();
+    const navigate = useNavigate();
 
     const onSubmit = (data) => {
         console.log("Form Data:", data);
+        navigate('/typeselected');
     };
 
     const inputStyle = "w-full px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-pink-200 focus:border-maroon-600 outline-none appearance-none bg-white text-gray-700";

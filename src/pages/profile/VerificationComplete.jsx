@@ -1,15 +1,15 @@
 import React from 'react';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import LoveBackground from '../../components/shared/LoveBackground';
-import images from '../../assets/image';
+import {images} from '../../assets/image';
 
 const VerificationComplete = () => {
     return (
-        <div className='min-h-screen bg-[#FFFFFF] px-6 pt-10 pb-20'>
+        <div className='bg-[#FFFFFF] px-6 pt-10 pb-12'>
             <div className='max-w-7xl mx-auto w-full rounded-3xl'>
                 <HeadingTitle />
                 <LoveBackground top={20} bottom={20} />
-                <div className='flex items-center justify-between'>
+                <div className='flex flex-col sm:flex-row items-center justify-between'>
                     <div className='max-w-131.75'>
                         <h2 className="text-2xl font-bold text-[#58001C] mb-3">
                             Verification Complete!
@@ -19,9 +19,16 @@ const VerificationComplete = () => {
                         </p>
                         <p className='text-[#58001C] text-xl font-medium'>Browse profiles based on your preferences and find someone special that matches your interests.</p>
                     </div>
-                    <div>
-                        <img className='max-w-100 mx-auto' src={images.completeImage} alt="completeImage.png" />
+                    <div className='max-w-95 mx-auto mt-10 sm:mt-0'>
+                        <img className='w-full' src={images.completeImage} alt="completeImage.png" />
                     </div>
+                </div>
+                <div className="flex justify-center mt-10">
+                    <button
+                        type="submit"
+                        className="bg-[#b3003b] hover:bg-[#8e002f] text-white font-bold py-3 sm:py-3.5 px-16 rounded-full transition-colors duration-200 shadow-lg w-full sm:w-auto">
+                        Continue
+                    </button>
                 </div>
             </div>
         </div>

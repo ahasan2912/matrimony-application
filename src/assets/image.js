@@ -4,16 +4,20 @@ import googleIcon from './images/svg/googleIcon.svg';
 import pakistanFalg from './images/svg/pakistan.svg';
 import qrcode from './images/qrcode.png';
 import qrUser from './images/qruser.png';
-import completeImage from './images/complete.png'
+import completeImage from './images/complete.png';
+import hartIcon from './images/svg/hartIcon.svg';
+import verified from './images/svg/verified.svg';
+import pinkstart from './images/svg/pinkstart.svg';
 
-const images = {
+export const images = {
     loveIcon,
     appleIcon,
     googleIcon,
     pakistanFalg,
     qrUser,
     qrcode,
-    completeImage
+    completeImage,
+    hartIcon,
+    verified,
+    pinkstart
 }
-
-export default images;

@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import loveIcon from '../../assets/images/svg/loveIcon.svg';
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
 
 const Verification = () => {
+    const navigate = useNavigate();
+    const handleClcikContinue = () => {
+        navigate('/createprofile')
+    }
     return (
         <div className="flex flex-col md:flex-row min-h-screen relative">
             <AuthSidebar />
@@ -16,7 +20,7 @@ const Verification = () => {
                     </h2>
                     {/* verification code here */}
                     <div className="space-y-4">
-                        <button className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer outline-0">
+                        <button onClick={handleClcikContinue} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer outline-0">
                             <span className="font-medium text-lg text-[#FFFFFF]">Continue</span>
                         </button>
 

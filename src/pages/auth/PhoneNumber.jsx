@@ -1,12 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import loveIcon from '../../assets/images/svg/loveIcon.svg';
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
-import images from '../../assets/image';
 import { useState } from 'react';
+import { images } from '../../assets/image';
 
 const PhoneNumber = () => {
     const [number, setNumber] = useState('');
-    console.log(number);
+    const navigate = useNavigate();
+    const handleClickContinue = () => {
+        navigate('/verfication');
+    }
     return (
         <div className="flex flex-col md:flex-row min-h-screen font-sans bg-white">
 
@@ -45,7 +48,7 @@ const PhoneNumber = () => {
                         </div>
                     </div>
 
-                    <button className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
+                    <button onClick={handleClickContinue} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
                         Continue
                     </button>
                 </div>

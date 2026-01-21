@@ -6,12 +6,11 @@ const AuthSidebar = () => {
             style={{ backgroundImage: "url('../../../src/assets/images/authpage.png')" }}>
             <div className="absolute inset-0 bg-black/20"></div>
 
-            <div className="relative z-10 text-white max-w-md mx-auto">
-                <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                    Find Your Perfect <span className="text-pink-400">Match</span>
-                </h1>
+            <div className="relative z-10 text-white max-w-md mx-auto mt-20">
+                <span className="text-4xl text-[#FF96AD] md:text-5xl font-bold leading-tight">Find Your Perfect Match</span>
+                <span className="font-normal text-[#D4D4D4]"> with Smart AI Recommendations and Parental Involvement, Guided with Care.</span>
                 <p className="text-base text-[#D4D4D4] opacity-90 leading-relaxed">
-                    with Smart AI Recommendations and Parental Involvement, Guided with Care.
+                    
                 </p>
             </div>
         </div>

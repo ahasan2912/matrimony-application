@@ -1,56 +1,74 @@
 import React from 'react';
+import { Crown } from 'lucide-react';
 
 const Testing = () => {
+  const avatars = [
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
+    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100",
+    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100",
+    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100",
+    "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100",
+    "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=100",
+  ];
+
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="max-w-7xl w-full bg-white rounded-2xl p-8">
-        <h1 className="text-2xl font-bold text-[#58001C] mb-2">
-          Confirm it's you in this photo to help keep our community authentic.
-        </h1>
-        <p className="text-[#737373] text-base leading-relaxed mb-6">
-          For your security and to ensure the authenticity of your profile, please scan the QR code 
-          with your mobile device. This process helps us verify your identity and keep our community safe.
+    <div className="max-w-4xl mx-auto p-6 bg-white min-h-screen font-sans">
+      <section className="mb-12">
+        <div className="flex items-center gap-2 mb-1">
+          <h2 className="text-xl font-bold text-red-900">People who liked you</h2>
+          <span className="bg-rose-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">25</span>
+        </div>
+        <p className="text-gray-500 text-sm mb-6">
+          Unlock who's shown interest in you. Get exclusive access to see who likes you and make connections!
         </p>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          <div className="flex justify-center">
-            <img 
-              src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600&auto=format&fit=crop" 
-              alt="User verification"
-              className="rounded-xl w-full h-auto object-cover max-w-70"
+        <div className="flex flex-col md:flex-row items-center gap-8">
+          <div className="relative w-48 h-64 rounded-xl overflow-hidden border-2 border-yellow-400 shadow-lg">
+            <img
+              src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400"
+              alt="Blurred profile"
+              className="w-full h-full object-cover blur-md scale-110"
             />
-          </div>
-          <div className="flex flex-col space-y-6">
-            <div className="space-y-4">
-              <p className="text-gray-800 text-sm md:text-base">
-                <span className="font-bold">Step 1:</span> Open the camera on your mobile phone or use a QR scanner app.
-              </p>
-              <p className="text-gray-800 text-sm md:text-base">
-                <span className="font-bold">Step 2:</span> Scan the QR code below using your phone.
-              </p>
-              <p className="text-gray-800 text-sm md:text-base">
-                <span className="font-bold">Step 3:</span> Follow the instructions on your phone to verify your identity.
-              </p>
-              <p className="text-gray-800 text-sm md:text-base">
-                <span className="font-bold">Step 4:</span> Once the scan is complete, confirm the verification on your web screen.
-              </p>
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400 p-3 rounded-full shadow-xl">
+              <Crown className="text-white w-6 h-6 fill-current" />
             </div>
-          </div>
-          <div className="flex justify-center md:justify-end">
-            <div className="bg-pink-50 p-6 rounded-3xl relative">
-              <div className="absolute -top-3 -right-3 text-pink-100 text-4xl">♥</div>
-              <div className="bg-white p-2 rounded-lg shadow-inner">
-                 <img 
-                   src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=VerificationLink" 
-                   alt="QR Code"
-                   className="w-32 h-32 md:w-40 md:h-40"
-                 />
+            <div className="absolute bottom-3 left-3 right-3 space-y-2">
+              <div className="h-4 w-2/3 bg-white/30 rounded blur-sm" />
+              <div className="flex gap-2">
+                <div className="h-3 w-1/3 bg-white/20 rounded blur-sm" />
+                <div className="h-3 w-1/3 bg-white/20 rounded blur-sm" />
               </div>
             </div>
           </div>
+          <div className="flex flex-col items-center">
+            <div className="flex -space-x-3 mb-4">
+              {avatars.map((url, i) => (
+                <img
+                  key={i}
+                  src={url}
+                  className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-sm"
+                  alt="user"
+                />
+              ))}
+            </div>
+            <button className="text-rose-600 font-bold hover:underline">
+              See all
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
+      <section>
+        <div className="flex items-center gap-2 mb-1">
+          <h2 className="text-xl font-bold text-red-900">People You Liked</h2>
+          <span className="bg-rose-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">25</span>
+        </div>
+        <p className="text-rose-400 text-sm font-medium mb-2">Likes remaining: 25</p>
+        <p className="text-gray-500 text-sm">
+          See the profiles you've shown interest in. Explore the people you've liked and make connections!
+        </p>
+      </section>
+
     </div>
   );
 };

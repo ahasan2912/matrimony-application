@@ -1,21 +1,18 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
         { name: 'Register', href: '/register', active: true },
-        { name: 'PhoneNumber', href: '/phonenumber' },
-        { name: 'Verification', href: '/verfication' },
-        { name: 'Createprofile', href: '/createprofile' },
-        { name: 'TypeSelected', href: '/typeselected' },
-        { name: 'UploadPhoto', href: '/profileupload' },
-        { name: 'FaceQRCode', href: '/faceqrcode' },
+        { name: 'Mathces', href: '/metches', active: true },
+        { name: 'Discover', href: '/discover', active: true },
     ];
 
     return (
-        <nav className="bg-[#FFF1F3] px-4 py-4 md:px-12 shadow-sm sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <nav className="bg-[#FFF1F3] py-4 shadow-sm sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto flex items-center justify-between px-4">
 
                 <div className="flex items-center">
                     <div className="bg-[#FF2D55] text-white px-6 py-2 rounded-md font-bold text-xl cursor-pointer">
@@ -25,14 +22,11 @@ const Navbar = () => {
 
                 <div className="hidden lg:flex items-center space-x-8">
                     {navLinks.map((link) => (
-                        <a
+                        <Link to={link.href}
                             key={link.name}
-                            href={link.href}
-                            className={`text-sm font-semibold transition-colors ${link.active ? 'text-[#FF2D55]' : 'text-[#8E1B3E] hover:text-[#FF2D55]'
-                                }`}
-                        >
+                            className={`text-sm font-semibold transition-colors ${link.active ? 'text-[#FF2D55]' : 'text-[#8E1B3E] hover:text-[#FF2D55]'}`}>
                             {link.name}
-                        </a>
+                        </Link>
                     ))}
                 </div>
 

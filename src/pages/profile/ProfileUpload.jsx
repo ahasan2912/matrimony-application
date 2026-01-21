@@ -2,10 +2,13 @@ import { useState } from 'react';
 import loveIcon from '../../assets/images/svg/loveIcon.svg';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import ImageUploaded from '../../components/ImageUploaded';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileUpload = () => {
     const [text, setText] = useState('');
     const [bioText, setBioText] = useState("");
+    const navigate = useNavigate();
+
     const maxLength = 100;
     /* Write about your ideal partner */
     const handleWriteIdelPartner = (e) => {
@@ -22,6 +25,8 @@ const ProfileUpload = () => {
 
     const handlephotoandBio = () => {
         console.log("all data show");
+        navigate('/faceqrcode');
+        
     }
     return (
         <div className='min-h-screen bg-[#FFFFFF] px-6 pt-10 pb-20'>

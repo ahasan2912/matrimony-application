@@ -12,6 +12,8 @@ import TypeSelected from "../pages/profile/TypeSelected";
 import ProfileUpload from "../pages/profile/ProfileUpload";
 import FaceQrCode from "../pages/profile/FaceQrCode";
 import VerificationComplete from "../pages/profile/VerificationComplete";
+import Matches from "../pages/matches/Matches";
+import Discover from "../pages/discover/Discover";
 
 const router = createBrowserRouter([
     {
@@ -24,12 +26,12 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path: "/phonenumber",
-                element: <PhoneNumber />,
-            },
-            {
                 path: "/register",
                 element: <Register />,
+            },
+            {
+                path: "/phonenumber",
+                element: <PhoneNumber />,
             },
             {
                 path: "/verfication",
@@ -55,6 +57,15 @@ const router = createBrowserRouter([
                 path: "/verificationcomplete",
                 element: <VerificationComplete />
             },
+            {
+                path: "/metches",
+                element: <Matches />
+            },
+            {
+                path: "/discover",
+                element: <Discover />
+            },
+
             {
                 path: "/testing",
                 element: <Testing />

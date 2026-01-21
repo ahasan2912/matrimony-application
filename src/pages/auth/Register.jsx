@@ -1,28 +1,22 @@
-import { Link } from 'react-router-dom';
-import images from '../../assets/image';
+import { Link, useNavigate } from 'react-router-dom';
 import loveIcon from '../../assets/images/svg/loveIcon.svg';
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
+import { images } from '../../assets/image';
 
 const Register = () => {
+    const navigate = useNavigate();
     const handleAppleAccout = () => {
-        console.log('handle apple account');
+        navigate('/phonenumber');
     }
 
     const handleGoogleAccout = () => {
-        console.log('handle goole account');
+        navigate('/phonenumber');
     }
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen relative">
             <AuthSidebar />
             <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-2 sm:p-6 relative">
-
-                <div className='top-0 right-0'>
-                    <button className="absolute top-6 right-6 flex items-center space-x-2 bg-gray-500/80 text-white px-3 py-1.5 rounded-full text-sm">
-                        <span>🌐 English</span>
-                    </button>
-                </div>
-
                 <img src={loveIcon} className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
                 <img src={loveIcon} className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
 

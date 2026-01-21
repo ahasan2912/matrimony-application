@@ -2,7 +2,7 @@
 const Footer = () => {
     return (
         <footer className="bg-pink-50/50 pt-12">
-            <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12 pb-12">
+            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12 pb-12">
                 <div>
                     <div className="bg-[#FF2D55] text-white px-6 py-2 w-fit rounded-md mb-8 font-bold text-xl">Logo</div>
                     <h3 className="font-bold text-lg mb-4">Contact Information:</h3>

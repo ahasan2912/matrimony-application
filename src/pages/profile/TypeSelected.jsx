@@ -2,12 +2,14 @@ import loveIcon from '../../assets/images/svg/loveIcon.svg';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import { useState } from 'react';
 import { selecteInterestItems, selectePersonalInterest } from '../../data/data';
+import { useNavigate } from 'react-router-dom';
 
 const TypeSelected = () => {
     const [selected, setSelected] = useState([]);
     const [prsnlInrstSelected, setPrsnlInrstSelected] = useState([]);
     const [smoking, setSmoking] = useState('Yes, Regularly');
     const [alcohol, setAlcohol] = useState('Yes, Regularly');
+    const navigate = useNavigate();
 
     const toggleInterest = (interest) => {
         let updated;
@@ -38,7 +40,7 @@ const TypeSelected = () => {
     ];
 
     const handleClickSelected = () => {
-        console.log("Ahasan Habib");
+        navigate("/profileupload");
     }
 
     return (

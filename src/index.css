@@ -4,3 +4,8 @@
 body {
     font-family: "Poppins", sans-serif;
 }
+
+
+html {
+    scrollbar-gutter: stable;
+}
