@@ -1,89 +1,128 @@
 import React, { useState } from 'react';
-import { Search, MessageCircle } from 'lucide-react'; // Optional for icons
+import { CheckCircle2 } from 'lucide-react';
+import { images } from '../assets/image';
 
-const Testing = () => {
-  const [activeTab, setActiveTab] = useState('Messages');
-
-  // Sample data to mimic your image
-  const messageData = [
-    { id: 1, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '5m ago', unread: 0 },
-    { id: 2, name: 'Sadia Hossain', text: 'New Messages', time: '5m ago', unread: 2 },
-    { id: 3, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '5m ago', unread: 0 },
-    { id: 4, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '5m ago', unread: 0 },
-    { id: 5, name: 'Sadia Hossain', text: 'New Messages', time: '5m ago', unread: 2 },
-    { id: 6, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '5m ago', unread: 0 },
-  ];
-
-  const tabs = ['Messages', 'Matches', 'Requests'];
+const PricingPlans = () => {
+  const [selectedPlan, setSelectedPlan] = useState('Gold');
 
   return (
-    <div className="min-h-screen p-4 md:p-8 flex justify-center">
-      <div className="w-full max-w-7xl bg-white rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex bg-gray-50 p-1 rounded-full w-fit">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeTab === tab
-                  ? 'bg-[#C2185B] text-white shadow-md'
-                  : 'text-gray-500 hover:text-gray-700'
-                  }`}
-              >
-                {tab}
-              </button>
-            ))}
+    <div className="min-h-[70vh] bg-white mt-5">
+      <div className="max-w-7xl mx-auto px-4">
+        <h2 className="text-2xl font-bold text-[#58001C] mb-2">Select your plan</h2>
+        <p className="text-[#737373] text-base mb-12">Choose the plan that best suits your needs. You can change it anytime!</p>
+
+        <div className="grid md:grid-cols-3 gap-6 mb-16 mt-10">
+
+          {/* Free Plan */}
+          <div
+            onClick={() => setSelectedPlan("Free")}
+            className={`bg-[#E5FFE5] rounded-xl p-6 relative cursor-pointer transition-transform hover:scale-105 border-2 ${selectedPlan === "Free" ? "border-gray-400" : "border-transparent"
+              }`}
+          >
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-linear-to-r from-[#A1D9A1] to-[#689A69] text-white px-4 py-1 rounded-lg font-bold shadow-md">
+              $0.00 p/m
+            </div>
+
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-2xl font-bold text-green-700">Free plan</h3>
+              <div className="bg-white/50 rounded-full w-16 h-16 flex items-center justify-center text-3xl shadow-inner">
+                <img src={images.primiumLoveIcon} alt="primiumLoveIcon" />
+              </div>
+            </div>
+
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2 font-medium text-green-700">
+                <CheckCircle2 size={18} />
+                Limited likes
+              </li>
+              <li className="flex items-center gap-2 font-medium text-green-700">
+                <CheckCircle2 size={18} />
+                Basic profile visibility
+              </li>
+              <li className="flex items-center gap-2 font-medium text-green-700">
+                <CheckCircle2 size={18} />
+                In-app purchases available
+              </li>
+            </ul>
           </div>
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#C2185B] focus:border-transparent transition-all"
-            />
+
+          {/* Gold Plan */}
+          <div
+            onClick={() => setSelectedPlan("Gold")}
+            className={`bg-yellow-100 rounded-xl p-6 relative cursor-pointer transition-transform hover:scale-105 border-2 ${selectedPlan === "Gold" ? "border-gray-400" : "border-transparent"
+              }`}
+          >
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-500 text-white px-4 py-1 rounded-lg font-bold shadow-md">
+              $19.99 p/m
+            </div>
+
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-2xl font-bold text-yellow-700">Gold plan</h3>
+              <div className="bg-white/50 rounded-full w-16 h-16 flex items-center justify-center text-3xl shadow-inner">
+                <img src={images.rignGoldIcon} alt="rignGoldIcon" />
+              </div>
+            </div>
+
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2 font-medium text-yellow-700">
+                <CheckCircle2 size={18} />
+                Unlimited Likes
+              </li>
+              <li className="flex items-center gap-2 font-medium text-yellow-700">
+                <CheckCircle2 size={18} />
+                See who likes you
+              </li>
+              <li className="flex items-center gap-2 font-medium text-yellow-700">
+                <CheckCircle2 size={18} />
+                Marriage counseling
+              </li>
+            </ul>
           </div>
+
+          {/* Platinum Plan */}
+          <div
+            onClick={() => setSelectedPlan("Platinum")}
+            className={`bg-blue-100 rounded-xl p-6 relative cursor-pointer transition-transform hover:scale-105 border-2 ${selectedPlan === "Platinum" ? "border-gray-400" : "border-transparent"
+              }`}
+          >
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#7DD3FC] to-[#0EA5E9] text-white px-4 py-1 rounded-lg font-bold shadow-md">
+              $29.99 p/m
+            </div>
+
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-2xl font-bold text-blue-700">Platinum plan</h3>
+              <div className="bg-white/50 rounded-full w-16 h-16 flex items-center justify-center text-3xl shadow-inner">
+                <img src={images.dimondIcon} alt="dimondIcon" />
+              </div>
+            </div>
+
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2 font-medium text-blue-700">
+                <CheckCircle2 size={18} />
+                All gold plan features
+              </li>
+              <li className="flex items-center gap-2 font-medium text-blue-700">
+                <CheckCircle2 size={18} />
+                Profile boost
+              </li>
+              <li className="flex items-center gap-2 font-medium text-blue-700">
+                <CheckCircle2 size={18} />
+                Super Likes
+              </li>
+            </ul>
+          </div>
+
         </div>
-        <div className="p-2">
-          {activeTab === 'Messages' ? (
-            <div className="divide-y divide-gray-50">
-              {messageData.map((msg, index) => (
-                <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50 cursor-pointer transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <img
-                        src="https://via.placeholder.com/60"
-                        alt={msg.name}
-                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-gray-800">{msg.name}</h3>
-                        {msg.unread > 0 && (
-                          <span className="bg-[#C2185B] text-white text-[10px] px-1.5 py-0.5 rounded-md flex items-center">
-                            <MessageCircle className="w-3 h-3 mr-1" fill="currentColor" />
-                            {msg.unread}
-                          </span>
-                        )}
-                      </div>
-                      <p className={`text-sm ${msg.unread > 0 ? 'text-gray-900 font-bold' : 'text-gray-500'}`}>
-                        {msg.text}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-xs text-gray-400 font-medium">{msg.time}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="h-64 flex items-center justify-center text-gray-400 italic">
-              No {activeTab} to show at the moment.
-            </div>
-          )}
+
+        {/* CTA Button */}
+        <div className="flex justify-center">
+          <button className="bg-[#B30042] hover:bg-[#900035] text-white sm:px-12 py-3 sm:py-4 rounded-full text-xl font-bold transition-all shadow-lg active:scale-95 w-full sm:w-auto">
+            Continue with {selectedPlan} Plan
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Testing
+export default PricingPlans;

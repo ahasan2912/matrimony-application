@@ -8,6 +8,13 @@ import completeImage from './images/complete.png';
 import hartIcon from './images/svg/hartIcon.svg';
 import verified from './images/svg/verified.svg';
 import pinkstart from './images/svg/pinkstart.svg';
+import counsellingImage1 from './images/counselling-1.png';
+import counsellingImage2 from './images/counselling-2.png';
+import counsellingImage3 from './images/counselling-3.png';
+import marrigeImage from './images/marrage.png';
+import primiumLoveIcon from './images/primiumLove.png';
+import rignGoldIcon from './images/goldring.png';
+import dimondIcon from './images/dimondIcon.png';
 
 export const images = {
     loveIcon,
@@ -19,5 +26,12 @@ export const images = {
     completeImage,
     hartIcon,
     verified,
-    pinkstart
+    pinkstart,
+    counsellingImage1,
+    counsellingImage2,
+    counsellingImage3,
+    marrigeImage,
+    primiumLoveIcon,
+    rignGoldIcon,
+    dimondIcon
 }

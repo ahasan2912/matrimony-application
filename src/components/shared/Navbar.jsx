@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
-        { name: 'Register', href: '/register', active: true },
-        { name: 'Mathces', href: '/metches', active: true },
-        { name: 'Discover', href: '/discover', active: true },
-        { name: 'Chat', href: '/chatlist', active: true },
+        { name: 'Mathces', href: '/metches' },
+        { name: 'Discover', href: '/discover' },
+        { name: 'Chat', href: '/chatlist' },
+        { name: 'Marriage Counselling', href: '/marriageCounselling' },
+        { name: 'Verification', href: '/verificationpage' },
     ];
 
     return (
@@ -21,17 +22,17 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                <div className="hidden lg:flex items-center space-x-8">
+                <div className="hidden md:flex items-center space-x-4">
                     {navLinks.map((link) => (
-                        <Link to={link.href}
+                        <NavLink to={link.href}
                             key={link.name}
-                            className={`text-sm font-semibold transition-colors ${link.active ? 'text-[#FF2D55]' : 'text-[#8E1B3E] hover:text-[#FF2D55]'}`}>
+                            className={({ isActive }) => isActive ? 'text-base font-semibold transition-colors text-[#FF2D55]' : 'text-sm font-semibold transition-colors text-[#8E1B3E] hover:text-[#FF2D55]'}>
                             {link.name}
-                        </Link>
+                        </NavLink>
                     ))}
                 </div>
 
-                <div className="hidden lg:flex items-center space-x-6">
+                <div className="hidden md:flex items-center space-x-6">
                     <button className="bg-[#F0B90B] hover:bg-[#D9A608] text-white px-5 py-2 rounded-xl flex items-center space-x-2 font-bold shadow-sm transition-all">
                         <span className="text-lg">👑</span>
                         <span>Upgrade</span>
@@ -48,15 +49,10 @@ const Navbar = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </button>
-                        <button className="hover:scale-110 transition-transform">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                            </svg>
-                        </button>
                     </div>
                 </div>
 
-                <div className="lg:hidden flex items-center">
+                <div className="md:hidden flex items-center">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         className="text-[#8E1B3E] p-2"
@@ -69,17 +65,16 @@ const Navbar = () => {
             </div>
 
             {isOpen && (
-                <div className="lg:hidden mt-4 bg-white rounded-2xl p-6 shadow-xl border border-pink-100 absolute left-4 right-4 animate-in slide-in-from-top duration-300">
+                <div className="md:hidden mt-4 bg-white px-3 py-3 shadow-xl border border-pink-100 absolute left-0 right-0 animate-in slide-in-from-top duration-500">
                     <div className="flex flex-col space-y-4">
                         {navLinks.map((link) => (
-                            <a
+                            <Link to={link.href}
                                 key={link.name}
-                                href={link.href}
-                                className={`text-lg font-semibold ${link.active ? 'text-[#FF2D55]' : 'text-[#8E1B3E]'
+                                className={`text-base font-semibold ${link.active ? 'text-[#FF2D55]' : 'text-[#8E1B3E]'
                                     }`}
                             >
                                 {link.name}
-                            </a>
+                            </Link>
                         ))}
                         <hr className="border-pink-50" />
                         <button className="bg-[#F0B90B] text-white py-3 rounded-xl font-bold flex justify-center items-center space-x-2">

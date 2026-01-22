@@ -15,6 +15,10 @@ import VerificationComplete from "../pages/profile/VerificationComplete";
 import Matches from "../pages/matches/Matches";
 import Discover from "../pages/discover/Discover";
 import ChatList from "../pages/chat/ChatList";
+import ChatBox from "../pages/chat/components/ChatBox";
+import MarriageCounselling from "../pages/counselling/MarriageCounselling";
+import Verfication from "../pages/verification/Verfication";
+import SubcribtionFeatures from "../pages/counselling/SubcribtionFeatures";
 
 const router = createBrowserRouter([
     {
@@ -69,6 +73,22 @@ const router = createBrowserRouter([
             {
                 path: "/chatlist",
                 element: <ChatList />
+            },
+            {
+                path: "/chatbox",
+                element: <ChatBox />
+            },
+            {
+                path: "/marriageCounselling",
+                element: <MarriageCounselling />
+            },
+            {
+                path: "/verificationpage",
+                element: <Verfication />
+            },
+            {
+                path: "/subcribtion",
+                element: <SubcribtionFeatures />
             },
             {
                 path: "/testing",
