@@ -32,9 +32,9 @@ const Navbar = () => {
                     ))}
                 </div>
 
-                <div className="hidden md:flex items-center space-x-6">
-                    <button className="bg-[#F0B90B] hover:bg-[#D9A608] text-white px-5 py-2 rounded-xl flex items-center space-x-2 font-bold shadow-sm transition-all">
-                        <span className="text-lg">👑</span>
+                <div className="hidden md:flex items-center space-x-4">
+                    <button className="bg-[#F0B90B] hover:bg-[#D9A608] text-white px-2 py-2 rounded-lg flex items-center space-x-1 font-bold shadow-sm transition-all">
+                        <span className="text-base">👑</span>
                         <span>Upgrade</span>
                     </button>
 
@@ -77,7 +77,7 @@ const Navbar = () => {
                             </Link>
                         ))}
                         <hr className="border-pink-50" />
-                        <button className="bg-[#F0B90B] text-white py-3 rounded-xl font-bold flex justify-center items-center space-x-2">
+                        <button className="bg-[#F0B90B] text-white py-3 rounded-xl font-bold flex justify-center items-center space-x-1">
                             <span>👑</span>
                             <span>Upgrade</span>
                         </button>

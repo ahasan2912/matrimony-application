@@ -15,6 +15,11 @@ import marrigeImage from './images/marrage.png';
 import primiumLoveIcon from './images/primiumLove.png';
 import rignGoldIcon from './images/goldring.png';
 import dimondIcon from './images/dimondIcon.png';
+import faceVerification from './images/face-verification.png';
+import veryfyedCard from './images/idcardverification.png';
+import verifyeducation from './images/education.png';
+import verifyParent from './images/family.png';
+import educationVerify from './images/educationverify.png';
 
 export const images = {
     loveIcon,
@@ -33,5 +38,10 @@ export const images = {
     marrigeImage,
     primiumLoveIcon,
     rignGoldIcon,
-    dimondIcon
+    dimondIcon,
+    faceVerification,
+    veryfyedCard,
+    verifyeducation,
+    verifyParent,
+    educationVerify
 }

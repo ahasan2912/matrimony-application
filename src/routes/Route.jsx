@@ -19,6 +19,9 @@ import ChatBox from "../pages/chat/components/ChatBox";
 import MarriageCounselling from "../pages/counselling/MarriageCounselling";
 import Verfication from "../pages/verification/Verfication";
 import SubcribtionFeatures from "../pages/counselling/SubcribtionFeatures";
+import ConsultantDetails from "../pages/counselling/ConsultantDetails";
+import EducationVerify from "../pages/verification/EducationVerify";
+import PassportVerify from "../pages/verification/PassportVerify";
 
 const router = createBrowserRouter([
     {
@@ -89,6 +92,18 @@ const router = createBrowserRouter([
             {
                 path: "/subcribtion",
                 element: <SubcribtionFeatures />
+            },
+            {
+                path: "/subcribtion/:id",
+                element: <ConsultantDetails />
+            },
+            {
+                path: "/passportVerify",
+                element: <PassportVerify/>
+            },
+            {
+                path: "/educationVerify",
+                element: <EducationVerify/>
             },
             {
                 path: "/testing",

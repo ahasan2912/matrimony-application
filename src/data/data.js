@@ -66,9 +66,44 @@ export const selectePersonalInterest = [
 
 export const interestsItem = ['Basketball 🏀', 'Pets 🐱', 'History 📜', 'Styling 👗', 'Swimming 🏊', 'Astrology ✨', 'Abroad ✈️', 'Cycling 🚴', 'Cycling 🚴', 'Non-Fiction 📚', 'Cycling 🚴', 'Abroad ✈️', 'Non-Fiction 📚', 'Cycling 🚴', 'Listening to Music 🎧'];
 
-export  const images = [
+export const images = [
     "https://t4.ftcdn.net/jpg/09/75/07/11/360_F_975071103_e99E3iSot86QtdT8vRJUyTOYao83XxRB.jpg",
     "https://www.gethucinema.com/wp-content/uploads/2025/02/Dur-e-Fishan-Saleem-52-UsFebW3583.jpg",
     "https://outspoken.newagebd.com/files/img/202509/973c08360b8ad3917ef2c56f57e6daf1.jpg",
     "https://i.pinimg.com/736x/05/49/a5/0549a5169fd3f274441ef7aff2b73bda.jpg",
-  ];
+];
+
+export const steps = [
+    {
+        id: 1,
+        title: "Face Verification",
+        description: "Face verified! Your identity is now securely confirmed.",
+        status: "Verified",
+        image: '../../src/assets/images/face-verification.png',
+        type: "completed"
+    },
+    {
+        id: 2,
+        title: "Verify ID Card",
+        description: "Upload your government issued ID for identity verification",
+        status: "Pending",
+        image: '../../src/assets/images/idcardverification.png',
+        type: "pending"
+    },
+    {
+        id: 3,
+        title: "Verify Education",
+        description: "Upload your degree or certificate to verify your education",
+        status: "Verify",
+        image: '../../src/assets/images/education.png',
+        type: "action"
+    },
+    {
+        id: 4,
+        title: "Verify Parent Info",
+        description: "Provide your parent or guardian details for verification.",
+        status: "Verify",
+        image: '../../src/assets/images/family.png',
+        type: "action"
+    }
+];

@@ -1,128 +1,75 @@
-import React, { useState } from 'react';
-import { CheckCircle2 } from 'lucide-react';
-import { images } from '../assets/image';
+import React from 'react';
+import { CheckCircle, Hourglass, GraduationCap, Users, User, CreditCard } from 'lucide-react';
+import { steps } from '../data/data';
 
-const PricingPlans = () => {
-  const [selectedPlan, setSelectedPlan] = useState('Gold');
+const Testing = () => {
 
   return (
-    <div className="min-h-[70vh] bg-white mt-5">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-2xl font-bold text-[#58001C] mb-2">Select your plan</h2>
-        <p className="text-[#737373] text-base mb-12">Choose the plan that best suits your needs. You can change it anytime!</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto w-full space-y-6 px-4 pt-10">
+        {/* Header */}
+        <header>
+          <h1 className="text-2xl font-bold text-[#58001C]">Verification</h1>
+          <p className="text-[#737373] text-base mt-1.5">
+            Verify your identity, education, and family details to enhance your profile's trust and visibility.
+          </p>
+        </header>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-16 mt-10">
-
-          {/* Free Plan */}
-          <div
-            onClick={() => setSelectedPlan("Free")}
-            className={`bg-[#E5FFE5] rounded-xl p-6 relative cursor-pointer transition-transform hover:scale-105 border-2 ${selectedPlan === "Free" ? "border-gray-400" : "border-transparent"
-              }`}
-          >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-linear-to-r from-[#A1D9A1] to-[#689A69] text-white px-4 py-1 rounded-lg font-bold shadow-md">
-              $0.00 p/m
-            </div>
-
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-2xl font-bold text-green-700">Free plan</h3>
-              <div className="bg-white/50 rounded-full w-16 h-16 flex items-center justify-center text-3xl shadow-inner">
-                <img src={images.primiumLoveIcon} alt="primiumLoveIcon" />
-              </div>
-            </div>
-
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 font-medium text-green-700">
-                <CheckCircle2 size={18} />
-                Limited likes
-              </li>
-              <li className="flex items-center gap-2 font-medium text-green-700">
-                <CheckCircle2 size={18} />
-                Basic profile visibility
-              </li>
-              <li className="flex items-center gap-2 font-medium text-green-700">
-                <CheckCircle2 size={18} />
-                In-app purchases available
-              </li>
-            </ul>
+        {/* Progress Bar */}
+        <div className="space-y-2 max-w-lg">
+          <p className="font-semibold text-gray-700">Verification Progress: 25%</p>
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div className="bg-rose-600 h-2.5 rounded-full" style={{ width: '30%' }}></div>
           </div>
-
-          {/* Gold Plan */}
-          <div
-            onClick={() => setSelectedPlan("Gold")}
-            className={`bg-yellow-100 rounded-xl p-6 relative cursor-pointer transition-transform hover:scale-105 border-2 ${selectedPlan === "Gold" ? "border-gray-400" : "border-transparent"
-              }`}
-          >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-500 text-white px-4 py-1 rounded-lg font-bold shadow-md">
-              $19.99 p/m
-            </div>
-
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-2xl font-bold text-yellow-700">Gold plan</h3>
-              <div className="bg-white/50 rounded-full w-16 h-16 flex items-center justify-center text-3xl shadow-inner">
-                <img src={images.rignGoldIcon} alt="rignGoldIcon" />
-              </div>
-            </div>
-
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 font-medium text-yellow-700">
-                <CheckCircle2 size={18} />
-                Unlimited Likes
-              </li>
-              <li className="flex items-center gap-2 font-medium text-yellow-700">
-                <CheckCircle2 size={18} />
-                See who likes you
-              </li>
-              <li className="flex items-center gap-2 font-medium text-yellow-700">
-                <CheckCircle2 size={18} />
-                Marriage counseling
-              </li>
-            </ul>
-          </div>
-
-          {/* Platinum Plan */}
-          <div
-            onClick={() => setSelectedPlan("Platinum")}
-            className={`bg-blue-100 rounded-xl p-6 relative cursor-pointer transition-transform hover:scale-105 border-2 ${selectedPlan === "Platinum" ? "border-gray-400" : "border-transparent"
-              }`}
-          >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#7DD3FC] to-[#0EA5E9] text-white px-4 py-1 rounded-lg font-bold shadow-md">
-              $29.99 p/m
-            </div>
-
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-2xl font-bold text-blue-700">Platinum plan</h3>
-              <div className="bg-white/50 rounded-full w-16 h-16 flex items-center justify-center text-3xl shadow-inner">
-                <img src={images.dimondIcon} alt="dimondIcon" />
-              </div>
-            </div>
-
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 font-medium text-blue-700">
-                <CheckCircle2 size={18} />
-                All gold plan features
-              </li>
-              <li className="flex items-center gap-2 font-medium text-blue-700">
-                <CheckCircle2 size={18} />
-                Profile boost
-              </li>
-              <li className="flex items-center gap-2 font-medium text-blue-700">
-                <CheckCircle2 size={18} />
-                Super Likes
-              </li>
-            </ul>
-          </div>
-
         </div>
 
-        {/* CTA Button */}
-        <div className="flex justify-center">
-          <button className="bg-[#B30042] hover:bg-[#900035] text-white sm:px-12 py-3 sm:py-4 rounded-full text-xl font-bold transition-all shadow-lg active:scale-95 w-full sm:w-auto">
-            Continue with {selectedPlan} Plan
-          </button>
+        {/* Cards Container */}
+        <div className="space-y-4">
+          {steps.map((step) => (
+            <VerificationCard key={step.id} {...step} />
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
-export default PricingPlans;
+const VerificationCard = ({ title, description, status, image, type }) => {
+  return (
+    <div className="bg-rose-50/50 border border-rose-100 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center space-x-6 gap-2">
+        {/* Icon Placeholder */}
+        <div className="max-w-37.5 bg-white p-3 rounded-lg shadow-sm">
+          <img className='w-full' src={image} alt="verification-card" />
+        </div>
+
+        <div>
+          <h3 className="text-xl font-bold text-[#B6003F]">{title}</h3>
+          <p className="text-[#737373] text-base mt-1">{description}</p>
+        </div>
+      </div>
+
+      <div className="flex items-center">
+        {type === "completed" && (
+          <span className="flex items-center text-rose-500 font-medium">
+            Verified <CheckCircle className="ml-2 w-5 h-5" />
+          </span>
+        )}
+
+        {type === "pending" && (
+          <span className="flex items-center text-amber-500 font-medium">
+            Pending <Hourglass className="ml-2 w-5 h-5 animate-pulse" />
+          </span>
+        )}
+
+        {type === "action" && (
+          <button className="bg-[#B6003F] w-fit hover:bg-rose-800 text-white px-6 py-2 rounded-full font-medium transition-colors cursor-pointer">
+            {status}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Testing;
