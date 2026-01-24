@@ -22,6 +22,9 @@ import SubcribtionFeatures from "../pages/counselling/SubcribtionFeatures";
 import ConsultantDetails from "../pages/counselling/ConsultantDetails";
 import EducationVerify from "../pages/verification/EducationVerify";
 import PassportVerify from "../pages/verification/PassportVerify";
+import ParentVerify from "../pages/verification/ParentVerify";
+import ProfilePriview from "../pages/preview/ProfilePriview";
+import ViewUserProfile from "../pages/viewUserProfile/ViewUserProfile";
 
 const router = createBrowserRouter([
     {
@@ -104,6 +107,18 @@ const router = createBrowserRouter([
             {
                 path: "/educationVerify",
                 element: <EducationVerify/>
+            },
+            {
+                path: "/parentVerify",
+                element: <ParentVerify/>
+            },
+            {
+                path: "/profilePreview",
+                element: <ProfilePriview/>
+            },
+            {
+                path: "/viewuserprofile",
+                element: <ViewUserProfile/>
             },
             {
                 path: "/testing",

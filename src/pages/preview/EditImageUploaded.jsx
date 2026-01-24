@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Plus, X } from "lucide-react";
 
-const ImageUploaded = () => {
+const EditImageUploaded = () => {
     const [images, setImages] = useState([]);
     const [dragIndex, setDragIndex] = useState(null);
     const fileInputRef = useRef(null);
@@ -47,13 +47,8 @@ const ImageUploaded = () => {
     };
 
     console.log(images);
-
     return (
-        <div className="">
-            <div className="flex justify-between items-end mb-4" >
-                <h3 className="font-semibold text-xl text-[#262626]">Upload your Photos</h3>
-                <span className="text-rose-600 font-bold text-lg">{images.length}/{MAX_PHOTOS}</span>
-            </div>
+        <div className="my-4">
             <input
                 type="file"
                 multiple
@@ -109,4 +104,4 @@ const ImageUploaded = () => {
     );
 };
 
-export default ImageUploaded;
+export default EditImageUploaded;

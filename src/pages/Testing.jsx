@@ -1,73 +1,83 @@
-import React from 'react';
-import { CheckCircle, Hourglass, GraduationCap, Users, User, CreditCard } from 'lucide-react';
-import { steps } from '../data/data';
+import { useForm } from 'react-hook-form';
+import { Pencil, MapPin, Calendar, ChevronUp, ChevronDown } from 'lucide-react';
 
 const Testing = () => {
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      fullName: 'Ahsan Habib',
+      location: 'Lahore, Punjab, Pakistan',
+      dob: '20/12/2000',
+      height: '121cm',
+    }
+  });
+
+  const onSubmit = (data) => {
+    console.log("Form Data:", data);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto w-full space-y-6 px-4 pt-10">
-        {/* Header */}
-        <header>
-          <h1 className="text-2xl font-bold text-[#58001C]">Verification</h1>
-          <p className="text-[#737373] text-base mt-1.5">
-            Verify your identity, education, and family details to enhance your profile's trust and visibility.
-          </p>
-        </header>
+    <div className="max-w-4xl p-6 bg-white font-sans">
+      <h2 className="text-xl font-bold text-red-900 mb-6">Personal Details</h2>
 
-        {/* Progress Bar */}
-        <div className="space-y-2 max-w-lg">
-          <p className="font-semibold text-gray-700">Verification Progress: 25%</p>
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div className="bg-rose-600 h-2.5 rounded-full" style={{ width: '30%' }}></div>
+      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+        {/* Name Field */}
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2 font-semibold text-gray-800">
+            Name <Pencil size={14} className="text-gray-400" />
+          </label>
+          <input
+            {...register("fullName")}
+            className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-red-50 focus:outline-none"
+          />
+        </div>
+
+        {/* Location Field */}
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2 font-semibold text-gray-800">
+            Location <Pencil size={14} className="text-gray-400" />
+          </label>
+          <div className="relative">
+            <MapPin size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              {...register("location")}
+              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-full focus:outline-none"
+            />
           </div>
         </div>
 
-        {/* Cards Container */}
-        <div className="space-y-4">
-          {steps.map((step) => (
-            <VerificationCard key={step.id} {...step} />
-          ))}
+        {/* Date of Birth Field */}
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2 font-semibold text-gray-800">
+            Date of birth <Pencil size={14} className="text-gray-400" />
+          </label>
+          <div className="relative">
+            <input
+              type='date'
+              {...register("dob")}
+              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none"
+            />
+          </div>
         </div>
-      </div>
-    </div>
-  );
-};
-
-const VerificationCard = ({ title, description, status, image, type }) => {
-  return (
-    <div className="bg-rose-50/50 border border-rose-100 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm gap-3">
-      <div className="flex flex-col sm:flex-row sm:items-center space-x-6 gap-2">
-        {/* Icon Placeholder */}
-        <div className="max-w-37.5 bg-white p-3 rounded-lg shadow-sm">
-          <img className='w-full' src={image} alt="verification-card" />
-        </div>
-
+        {/* Height */}
         <div>
-          <h3 className="text-xl font-bold text-[#B6003F]">{title}</h3>
-          <p className="text-[#737373] text-base mt-1">{description}</p>
+          <div className="flex flex-col gap-2">
+            <label className="flex items-center gap-2 font-semibold text-gray-800">
+              Height <Pencil size={14} className="text-gray-400" />
+            </label>
+            <div className="relative">
+              <MapPin size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                {...register("height", { required: true })}
+                className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-full focus:outline-none" placeholder="122" />
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="flex items-center">
-        {type === "completed" && (
-          <span className="flex items-center text-rose-500 font-medium">
-            Verified <CheckCircle className="ml-2 w-5 h-5" />
-          </span>
-        )}
-
-        {type === "pending" && (
-          <span className="flex items-center text-amber-500 font-medium">
-            Pending <Hourglass className="ml-2 w-5 h-5 animate-pulse" />
-          </span>
-        )}
-
-        {type === "action" && (
-          <button className="bg-[#B6003F] w-fit hover:bg-rose-800 text-white px-6 py-2 rounded-full font-medium transition-colors cursor-pointer">
-            {status}
+        <div className="md:col-span-2 pt-4">
+          <button type="submit" className="bg-red-900 text-white px-10 py-3 rounded-full font-semibold hover:bg-red-800 transition-all shadow-md">
+            Update Profile
           </button>
-        )}
-      </div>
+        </div>
+      </form>
     </div>
   );
 };

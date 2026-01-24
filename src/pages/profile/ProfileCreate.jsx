@@ -178,7 +178,7 @@ const ProfileCreate = () => {
                                     <h2 className="text-2xl font-semibold text-[#58001C] mb-6">Personal Information</h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label className={labelStyle}>What is your name?</label>
+                                            <label className={labelStyle}>What is your Child name?</label>
                                             <input
                                                 type="text"
                                                 {...register("fullName", { required: true })}
@@ -186,14 +186,14 @@ const ProfileCreate = () => {
                                                 className={inputStyle} />
                                         </div>
                                         <div className="date">
-                                            <label className={labelStyle}>Date of Birth</label>
+                                            <label className={labelStyle}>Date of Birth your child?</label>
                                             <input
                                                 type="date"
                                                 {...register("dob", { required: true })}
                                                 className={inputStyle} />
                                         </div>
                                         <div className="gender">
-                                            <label className={labelStyle}>What is your Gender?</label>
+                                            <label className={labelStyle}>What is your child Gender?</label>
                                             <select
                                                 {...register("gender", { required: true })}
                                                 className={inputStyle}>
@@ -206,7 +206,7 @@ const ProfileCreate = () => {
                                             <label className={labelStyle}>Height</label>
                                             <input
                                                 {...register("height", { required: true })}
-                                                placeholder="4'0'' (122 cm)"
+                                                placeholder="122 cm"
                                                 className={inputStyle} />
                                         </div>
                                         <div className="religion">

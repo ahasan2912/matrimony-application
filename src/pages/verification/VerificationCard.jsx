@@ -6,8 +6,11 @@ const VerificationCard = ({ title, description, status, image, type }) => {
         if (title === 'Verify Education') {
             navigate('/educationVerify');
         }
-        if (title === 'Verify Parent Info') {
+        if (title === 'Verify ID Card') {
             navigate('/passportVerify');
+        }
+        if (title === 'Verify Parent Info') {
+            navigate('/parentVerify');
         }
     }
     return (
@@ -30,12 +33,13 @@ const VerificationCard = ({ title, description, status, image, type }) => {
                         Verified <CheckCircle className="ml-2 w-5 h-5" />
                     </span>
                 )}
+                {/* here is pending button */}
 
-                {type === "pending" && (
+                {/* {type === "pending" && (
                     <span className="flex items-center text-amber-500 font-medium">
                         Pending <Hourglass className="ml-2 w-5 h-5 animate-pulse" />
                     </span>
-                )}
+                )} */}
 
                 {type === "action" && (
                     <button onClick={() => handleClcikVerify(title)} className="bg-[#B6003F] w-fit hover:bg-rose-800 text-white px-6 py-2 rounded-full font-medium transition-colors cursor-pointer">

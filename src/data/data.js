@@ -73,6 +73,10 @@ export const images = [
     "https://i.pinimg.com/736x/05/49/a5/0549a5169fd3f274441ef7aff2b73bda.jpg",
 ];
 
+export const priviewimages = [
+    "https://i.ibb.co.com/DfPdXFCZ/Ahasan-Habib.png",
+];
+
 export const steps = [
     {
         id: 1,
@@ -88,7 +92,7 @@ export const steps = [
         description: "Upload your government issued ID for identity verification",
         status: "Pending",
         image: '../../src/assets/images/idcardverification.png',
-        type: "pending"
+        type: "action"
     },
     {
         id: 3,

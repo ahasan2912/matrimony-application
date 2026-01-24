@@ -1,8 +1,9 @@
+import Register from "../auth/Register";
 
 const Home = () => {
     return (
         <div>
-            <h1>Welcome our home page.....</h1>
+            <Register />
         </div>
     );
 };

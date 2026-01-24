@@ -20,6 +20,11 @@ import veryfyedCard from './images/idcardverification.png';
 import verifyeducation from './images/education.png';
 import verifyParent from './images/family.png';
 import educationVerify from './images/educationverify.png';
+import ahasanImage from './images/ahasan.png';
+import naverUser from './images/svg/navaruser.svg';
+import navernotification from './images/svg/notification.svg';
+import queenIcon from './images/svg/queenIcon.svg';
+import logo from './images/svg/logo.svg';
 
 export const images = {
     loveIcon,
@@ -43,5 +48,10 @@ export const images = {
     veryfyedCard,
     verifyeducation,
     verifyParent,
-    educationVerify
+    educationVerify,
+    ahasanImage,
+    naverUser,
+    navernotification,
+    queenIcon,
+    logo,
 }

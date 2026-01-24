@@ -19,6 +19,13 @@ const PassportVerify = () => {
                     <img className='w-full' src={images.veryfyedCard} alt="veryfyedCard" />
                 </div>
             </div>
+            <div className="flex justify-center sm:pt-4 pb-10 px-4">
+                <button
+                    type="submit"
+                    className="bg-[#b3003b] hover:bg-[#8e002f] text-white font-bold py-3 sm:py-3.5 px-16 rounded-full transition-colors duration-200 shadow-lg w-full sm:w-auto">
+                    Upload Photo
+                </button>
+            </div>
         </div>
     );
 };
