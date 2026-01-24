@@ -9,3 +9,7 @@ body {
 html {
     scrollbar-gutter: stable;
 }
+
+.authBgImage{
+    background-image: url('../src/assets/images/authpage.png');
+}

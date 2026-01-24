@@ -2,8 +2,7 @@
 const AuthSidebar = () => {
     return (
         <div
-            className="relative w-full md:w-1/2 min-h-100 bg-cover bg-no-repeat bg-center flex items-end p-8 md:p-16 flex-col justify-center"
-            style={{ backgroundImage: "url('../../../src/assets/images/authpage.png')" }}>
+            className="relative w-full md:w-1/2 min-h-100 bg-cover bg-no-repeat bg-center flex items-end p-8 md:p-16 flex-col justify-center authBgImage">
             <div className="absolute inset-0 bg-black/20"></div>
 
             <div className="relative z-10 text-white max-w-md mx-auto mt-20">
