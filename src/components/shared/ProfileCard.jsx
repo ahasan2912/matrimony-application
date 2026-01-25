@@ -1,5 +1,5 @@
 import { PencilLine, Settings, AlertTriangle, ChevronRight, CheckCircle2 } from 'lucide-react';
-import { images } from '../../assets/image';
+import { images } from '../../../public/image';
 import { Link } from 'react-router-dom';
 
 const ProfileCard = ({ menuRef }) => {

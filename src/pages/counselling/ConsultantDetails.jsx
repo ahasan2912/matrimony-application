@@ -1,5 +1,5 @@
 import { Calendar, Video, Send } from 'lucide-react';
-import { images } from '../../assets/image';
+import { images } from '../../../public/image';
 import { useState } from 'react';
 
 const ConsultantDetails = () => {

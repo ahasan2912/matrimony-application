@@ -1,5 +1,5 @@
 import { MapPinCheck, SquarePen } from 'lucide-react';
-import { images } from '../../../assets/image';
+import { images } from '../../../../public/image';
 
 const Nearby = ({ profiles }) => {
     return (

@@ -1,5 +1,5 @@
 import { PencilIcon, EyeIcon   } from 'lucide-react';
-import { images } from '../../assets/image';
+import { images } from '../../../public/image';
 import EditImageUploaded from './EditImageUploaded';
 import PersonalInformation from './PersonalInformation';
 import { Link } from 'react-router-dom';

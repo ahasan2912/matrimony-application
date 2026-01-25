@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { images } from '../../assets/image';
+import { images } from '../../../public/image';
 
 const EducationVerify = () => {
     useEffect(() => {

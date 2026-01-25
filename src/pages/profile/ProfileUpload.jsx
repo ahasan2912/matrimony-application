@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import loveIcon from '../../../public/images/svg/loveIcon.svg';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import ImageUploaded from '../../components/ImageUploaded';
 import { useNavigate } from 'react-router-dom';

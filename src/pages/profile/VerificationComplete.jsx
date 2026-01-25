@@ -1,7 +1,7 @@
 import React from 'react';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import LoveBackground from '../../components/shared/LoveBackground';
-import {images} from '../../assets/image';
+import {images} from '../../../public/image';
 
 const VerificationComplete = () => {
     return (

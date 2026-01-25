@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import loveIcon from '../../assets/images/svg/loveIcon.svg';
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
-import { images } from '../../assets/image';
+import { images } from '../../../public/image';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -17,11 +16,11 @@ const Register = () => {
         <div className="flex flex-col md:flex-row min-h-screen relative">
             <AuthSidebar />
             <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-2 sm:p-6 relative">
-                <img src={loveIcon} className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
-                <img src={loveIcon} className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
+                <img src={images.loveIcon} className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
+                <img src={images.loveIcon} className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
 
 
-                <div className="w-full max-w-md bg-[#FFEFF1] rounded-2xl px-8 py-8 md:px-12 md:py-12 text-center border border-pink-100 mt-5 sm:0">
+                <div className="w-full max-w-lg bg-[#FFEFF1] rounded-2xl px-4 py-8 md:px-12 md:py-12 text-center border border-pink-100 mt-5 sm:0">
                     <h2 className="text-[32px] font-bold text-[#B6003F] mb-4">
                         Sign Up to Get Started
                     </h2>

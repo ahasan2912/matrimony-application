@@ -1,4 +1,4 @@
-import { images } from '../../../assets/image';
+import { images } from '../../../../public/image';
 
 const Recommendation = ({ profiles }) => {
     return (

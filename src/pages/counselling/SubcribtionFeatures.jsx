@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { images } from "../../assets/image";
+import { images } from "../../../public/image";
 import { CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

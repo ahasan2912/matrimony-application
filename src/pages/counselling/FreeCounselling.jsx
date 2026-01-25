@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { images } from "../../assets/image";
+import { images } from "../../../public/image";
 
 const FreeCounselling = () => {
      const naviage = useNavigate();

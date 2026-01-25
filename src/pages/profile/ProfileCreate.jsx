@@ -2,7 +2,7 @@ import { ChevronDown, Map, MapPin } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import HeadingTitle from "../../components/home/HeadingTitle";
-import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import loveIcon from '../../../public/images/svg/loveIcon.svg';
 import { useNavigate } from "react-router-dom";
 
 const ProfileCreate = () => {
@@ -203,14 +203,14 @@ const ProfileCreate = () => {
                                             <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                         </div>
                                         <div>
-                                            <label className={labelStyle}>Height</label>
+                                            <label className={labelStyle}>What is your child Height</label>
                                             <input
                                                 {...register("height", { required: true })}
                                                 placeholder="122 cm"
                                                 className={inputStyle} />
                                         </div>
                                         <div className="religion">
-                                            <label className={labelStyle}>What is your Religion?</label>
+                                            <label className={labelStyle}>What is your child Religion?</label>
                                             <select
                                                 {...register("religion", { required: true })}
                                                 className={inputStyle}>
@@ -221,7 +221,7 @@ const ProfileCreate = () => {
                                             <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                         </div>
                                         <div className="relative">
-                                            <label className={labelStyle}>Select your Sect</label>
+                                            <label className={labelStyle}>Select your child Sect</label>
                                             <select
                                                 {...register("sect", { required: true })}
                                                 className={inputStyle}>
@@ -233,7 +233,7 @@ const ProfileCreate = () => {
                                             <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                         </div>
                                         <div className="relative">
-                                            <label className={labelStyle}>Select your Cast</label>
+                                            <label className={labelStyle}>Select your child Cast</label>
                                             <select
                                                 {...register("cast", { required: true })}
                                                 className={inputStyle}>
@@ -243,7 +243,7 @@ const ProfileCreate = () => {
                                             <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                         </div>
                                         <div>
-                                            <label className={labelStyle}>Your Location</label>
+                                            <label className={labelStyle}>Your child Location</label>
                                             <div className="flex items-center relative">
                                                 <input
                                                     type="text"

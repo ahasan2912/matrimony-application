@@ -11,5 +11,25 @@ html {
 }
 
 .authBgImage{
-    background-image: url('../src/assets/images/authpage.png');
+    background-image: url('../public/images/authpage.png');
+}
+
+
+/* Remove Google Translate header */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+/* Hide Google dropdown */
+.goog-te-gadget {
+  display: none !important;
+}
+
+/* Prevent layout shift */
+.skiptranslate {
+  display: none !important;
 }

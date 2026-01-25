@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import loveIcon from '../../../public/images/svg/loveIcon.svg'
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
 import { useRef, useState } from 'react';
 const OTP_LENGTH = 6;

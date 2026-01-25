@@ -2,10 +2,10 @@ import ConsultantCard from "./consaltant/ConsultantCard";
 
 const MarriageConsaltant = () => {
     const consultantData = [
-        { id: 1, name: "Alfaaz Ahmed", image: "../../../src/assets/images/consultant.png" },
-        { id: 2, name: "Hania Amir", image: "../../../src/assets/images/consultant.png" },
-        { id: 3, name: "Hania Amir", image: "../../../src/assets/images/consultant.png" },
-        { id: 4, name: "Alfaaz Ahmed", image: "../../../src/assets/images/consultant.png" },
+        { id: 1, name: "Alfaaz Ahmed", image: "../../../public/images/consultant.png" },
+        { id: 2, name: "Alfaaz Ahmed", image: "../../../public/images/consultant.png" },
+        { id: 3, name: "Alfaaz Ahmed", image: "../../../public/images/consultant.png" },
+        { id: 4, name: "Alfaaz Ahmed", image: "../../../public/images/consultant.png" },
     ];
     return (
         <div>

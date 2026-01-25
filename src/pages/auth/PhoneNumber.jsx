@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
-import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import loveIcon from '../../../public/images/svg/loveIcon.svg';
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
 import { useState } from 'react';
-import { images } from '../../assets/image';
+import { images } from '../../../public/image';
 
 const PhoneNumber = () => {
     const [number, setNumber] = useState('');
@@ -18,37 +18,37 @@ const PhoneNumber = () => {
                 <img src={loveIcon} className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
                 <img src={loveIcon} className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
 
-                <div className="w-full max-w-md bg-[#FFEFF1] rounded-2xl px-2 sm:px-8 py-8 md:px-12 md:py-12 text-center border border-pink-100 mt-5 sm:0">
+                <div className="w-full max-w-lg bg-[#FFEFF1] rounded-xl px-2 sm:px-8 py-6 md:px-8 md:py-12 text-center border border-pink-100 mt-5 sm:0">
                     <h2 className="text-[32px] font-bold text-[#B6003F] mb-4">
                         Enter Your Phone Number
                     </h2>
                     <p className="text-[#737373] text-lg mb-8">
                         Create your profile and begin your journey to finding the perfect match!
                     </p>
-                    <div className="flex w-full h-14 bg-white border border-gray-400 rounded-xl overflow-hidden mb-8">
-                        <div className="flex-1 items-center px-2 space-x-2 cursor-pointer hover:bg-gray-50">
-                            <div className='flex items-center justify-center h-14 px-2'>
-                                <img
-                                    src={images.pakistanFalg}
-                                    alt="Flag"
-                                    className="w-8 h-6 object-cover"
+                    <div className="flex items-center justify-center">
+                        <div className="flex w-full max-w-md bg-white border-2 border-gray-400 rounded-xl overflow-hidden shadow-sm">
+                            <div className="flex items-center gap-2 px-2 py-3 bg-white border-r border-gray-400">
+                                <div className="w-8 h-6 overflow-hidden rounded-sm flex items-center justify-center">
+                                    <img
+                                        src={images.pakistanFalg}
+                                        alt="Pakistan Flag"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <span className="text-lg sm:text-xl font-semibold text-gray-800">+92</span>
+                            </div>
+                            <div className="flex pl-4 py-3">
+                                <input
+                                    type="tel"
+                                    value={number}
+                                    onChange={(e) => setNumber(e.target.value)}
+                                    placeholder="123 456 789"
+                                    className="text-lg sm:text-xl font-semibold text-gray-800 bg-transparent outline-none placeholder-gray-400"
                                 />
-                                <span className="text-lg sm:text-xl font-bold text-gray-800">+92</span>
                             </div>
                         </div>
-                        <div className='flex items-center justify-center border-l border-gray-300 px-2'>
-                            <input
-                                type="tel"
-                                value={number}
-                                onChange={(e) => setNumber(e.target.value)}
-                                placeholder="123 456 789"
-                                className="flex-1 px-4 text-xl text-gray-600 outline-none placeholder:text-gray-400 "
-                                required
-                            />
-                        </div>
                     </div>
-
-                    <button onClick={handleClickContinue} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
+                    <button onClick={handleClickContinue} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer font-medium text-lg mt-6">
                         Continue
                     </button>
                 </div>

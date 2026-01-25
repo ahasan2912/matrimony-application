@@ -1,4 +1,4 @@
-import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import loveIcon from '../../../public/images/svg/loveIcon.svg';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import { useState } from 'react';
 import { selecteInterestItems, selectePersonalInterest } from '../../data/data';

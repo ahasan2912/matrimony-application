@@ -1,4 +1,4 @@
-import loveIcon from '../../assets/images/svg/loveIcon.svg';
+import loveIcon from '../../../public/images/svg/loveIcon.svg'
 const LoveBackground = ({top, bottom}) => {
     return (
         <div>

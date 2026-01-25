@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { images } from '../../../assets/image';
+import { images } from '../../../../public/image';
 import Like from './Like';
 
 const Interactions = ({ profiles }) => {

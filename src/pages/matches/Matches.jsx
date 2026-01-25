@@ -4,7 +4,7 @@ import {
   Briefcase, Moon, Heart, X, RotateCcw, MessageCircle, GraduationCap, ShieldCheck,
 } from 'lucide-react';
 import { images, interestsItem } from '../../data/data';
-import { images as Icon } from '../../assets/image';
+import { images as Icon } from '../../../public/image';
 import SectionTitle from './components/SectionTitle';
 import Badge from './components/Badge';
 

@@ -1,3 +1,4 @@
+
 export const selecteInterestItems = [
     {
         title: "Arts & Crafts",
@@ -83,7 +84,7 @@ export const steps = [
         title: "Face Verification",
         description: "Face verified! Your identity is now securely confirmed.",
         status: "Verified",
-        image: '../../src/assets/images/face-verification.png',
+        image: '../../public/images/consultant.png',
         type: "completed"
     },
     {
@@ -91,7 +92,7 @@ export const steps = [
         title: "Verify ID Card",
         description: "Upload your government issued ID for identity verification",
         status: "Pending",
-        image: '../../src/assets/images/idcardverification.png',
+        image: '../../public/images/consultant.png',
         type: "action"
     },
     {
@@ -99,7 +100,7 @@ export const steps = [
         title: "Verify Education",
         description: "Upload your degree or certificate to verify your education",
         status: "Verify",
-        image: '../../src/assets/images/education.png',
+        image: '../../public/images/consultant.png',
         type: "action"
     },
     {
@@ -107,7 +108,9 @@ export const steps = [
         title: "Verify Parent Info",
         description: "Provide your parent or guardian details for verification.",
         status: "Verify",
-        image: '../../src/assets/images/family.png',
+        image: '../../public/images/consultant.png',
         type: "action"
     }
 ];
+
+

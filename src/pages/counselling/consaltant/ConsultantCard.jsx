@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
+import consultantImage from '../../../../public/images/consultant.png'
 
 const ConsultantCard = ({ name, imageUrl, id }) => {
+    console.log(imageUrl);
     return (
         <div className="flex flex-row items-center bg-[#FFF1F3] rounded-lg border border-[#FFE4E8] shadow-sm w-full p-3">
 
             <div className="max-w-40">
                 <img
-                    src={imageUrl}
+                    src={consultantImage}
                     alt={name}
                     className="w-full h-full object-cover rounded-md"
                 />
