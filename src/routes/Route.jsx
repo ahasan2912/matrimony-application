@@ -25,6 +25,7 @@ import PassportVerify from "../pages/verification/PassportVerify";
 import ParentVerify from "../pages/verification/ParentVerify";
 import ProfilePriview from "../pages/preview/ProfilePriview";
 import ViewUserProfile from "../pages/viewUserProfile/ViewUserProfile";
+import BlockPage from "../pages/blcokpage/BlockPage";
 
 const router = createBrowserRouter([
     {
@@ -119,6 +120,10 @@ const router = createBrowserRouter([
             {
                 path: "/viewuserprofile",
                 element: <ViewUserProfile/>
+            },
+            {
+                path: "/blockpage",
+                element: <BlockPage/>
             },
             {
                 path: "/testing",

@@ -1,13 +1,8 @@
-import { PencilLine, Settings, AlertTriangle, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { PencilLine, Settings, AlertTriangle, ChevronRight } from 'lucide-react';
 import { images } from '../../../public/image';
 import { Link } from 'react-router-dom';
 
 const ProfileCard = ({ menuRef }) => {
-    const menuItems = [
-        { icon: <PencilLine size={20} />, label: 'Edit Details' },
-        { icon: <Settings size={20} />, label: 'Matchmaking Preferences' },
-        { icon: <AlertTriangle size={20} />, label: 'Report & Blocking' },
-    ];
     return (
         <div ref={menuRef} className="flex justify-center items-center p-4 absolute right-0 top-16 z-50">
             <div className="w-full  bg-linear-to-b from-[#F5F5F5] to-[#FFEFF1] rounded-xl shadow-sm border border-[#737373] p-5 transition-all duration-500 ease-out">
@@ -35,23 +30,35 @@ const ProfileCard = ({ menuRef }) => {
                 <hr className="border-gray-100 mb-2" />
 
                 <div className="space-y-1">
-                    {menuItems.map((item, index) => (
-                        <button
-                            key={index}
-                            className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors group"
-                        >
-                            <div className="flex items-center gap-3 text-gray-700">
-                                <span className="text-gray-600">{item.icon}</span>
-                                <span className="font-medium text-[15px]">{item.label}</span>
-                            </div>
-                            <ChevronRight size={18} className="text-gray-400 group-hover:text-gray-600" />
-                        </button>
-                    ))}
+                    <Link to='/'
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors group">
+                        <div className="flex items-center gap-3 text-gray-700">
+                            <span className="text-gray-600"><PencilLine size={20} /></span>
+                            <span className="font-medium text-[15px]">Edit Details</span>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-400 group-hover:text-gray-600" />
+                    </Link>
+                    <Link to='/'
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors group">
+                        <div className="flex items-center gap-3 text-gray-700">
+                            <span className="text-gray-600"><Settings size={20} /></span>
+                            <span className="font-medium text-[15px]">Matchmaking Preferences</span>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-400 group-hover:text-gray-600" />
+                    </Link>
+                    <Link to='/blockpage'
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors group">
+                        <div className="flex items-center gap-3 text-gray-700">
+                            <span className="text-gray-600"><AlertTriangle size={20} /></span>
+                            <span className="font-medium text-[15px]">Report & Blocking</span>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-400 group-hover:text-gray-600" />
+                    </Link>
                 </div>
                 <div className="mt-6">
-                    <button className="bg-[#b3003b] hover:bg-[#900030] text-white font-bold py-2.5 px-8 rounded-full transition-all active:scale-95">
+                    <Link className="bg-[#b3003b] hover:bg-[#900030] text-white font-bold py-2.5 px-8 rounded-full transition-all active:scale-95">
                         Log Out
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>

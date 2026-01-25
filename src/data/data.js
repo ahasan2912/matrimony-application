@@ -84,7 +84,7 @@ export const steps = [
         title: "Face Verification",
         description: "Face verified! Your identity is now securely confirmed.",
         status: "Verified",
-        image: '../../public/images/consultant.png',
+        image: '../../public/images/face-verification.png',
         type: "completed"
     },
     {
@@ -92,7 +92,7 @@ export const steps = [
         title: "Verify ID Card",
         description: "Upload your government issued ID for identity verification",
         status: "Pending",
-        image: '../../public/images/consultant.png',
+        image: '../../public/images/idcardverification.png',
         type: "action"
     },
     {
@@ -100,7 +100,7 @@ export const steps = [
         title: "Verify Education",
         description: "Upload your degree or certificate to verify your education",
         status: "Verify",
-        image: '../../public/images/consultant.png',
+        image: '../../public/images/education.png',
         type: "action"
     },
     {
@@ -108,7 +108,7 @@ export const steps = [
         title: "Verify Parent Info",
         description: "Provide your parent or guardian details for verification.",
         status: "Verify",
-        image: '../../public/images/consultant.png',
+        image: '../../public/images/family.png',
         type: "action"
     }
 ];

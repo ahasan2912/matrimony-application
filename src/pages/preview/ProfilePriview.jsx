@@ -18,7 +18,7 @@ const ProfilePriview = () => {
                             className="w-full h-full object-cover"
                         />
                     </div>
-                    <div className="absolute top-2 left-36 bg-white">
+                    <div className="absolute top-2 left-36 bg-white rounded-full">
                         <img src={images.verified} alt="verified" />
                     </div>
                 </div>

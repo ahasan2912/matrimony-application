@@ -27,8 +27,6 @@ const Navbar = () => {
         }
         window.location.href = path;
     };
-    /* language */
-
     const navLinks = [
         { name: 'Mathces', href: '/metches' },
         { name: 'Discover', href: '/discover' },
@@ -57,7 +55,7 @@ const Navbar = () => {
     // '/subcribtion'
 
     return (
-        <nav className="bg-[#FFF1F3] py-4 shadow-sm sticky top-0 z-40 notranslate">
+        <nav ref={menuRef} className="bg-[#FFF1F3] py-4 shadow-sm sticky top-0 z-40 notranslate">
             <div className="max-w-7xl mx-auto flex items-center justify-between px-4 relative">
                 <div className="flex items-center">
                     <div className="bg-[#FF2D55] text-white px-6 py-2 rounded-md font-bold text-xl cursor-pointer">
@@ -76,10 +74,12 @@ const Navbar = () => {
                 </div>
                 <div>
                     <div className="hidden lg:flex items-center space-x-6">
-                        <button className="bg-[#F0B90B] hover:bg-[#D9A608] text-white px-2 py-2 rounded-lg flex items-center space-x-1 font-medium shadow-sm transition-all cursor-pointer">
-                            <img src={images.queenIcon} alt="queenIcon" />
-                            <span className='mt-0.5'>Upgrade</span>
-                        </button>
+                        <Link to='/subcribtion'>
+                            <button className="bg-[#F0B90B] hover:bg-[#D9A608] text-white px-2 py-2 rounded-lg flex items-center space-x-1 font-medium shadow-sm transition-all cursor-pointer">
+                                <img src={images.queenIcon} alt="queenIcon" />
+                                <span className='mt-0.5'>Upgrade</span>
+                            </button>
+                        </Link>
                         {/* Language */}
                         <select
                             value={currentLang}
@@ -88,6 +88,7 @@ const Navbar = () => {
                             <option value="en">English</option>
                             <option value="bn">Bangla</option>
                             <option value="ur">Urdu</option>
+                            <option value="ar">Arabic</option>
                         </select>
                         <div className="flex items-center space-x-8 text-[#8E1B3E]">
                             <button className="hover:scale-110 transition-transform cursor-pointer">
