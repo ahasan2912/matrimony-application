@@ -1,63 +1,157 @@
-import React, { useState } from 'react';
+import { useEffect, useRef, useState } from "react";
+import { QRCodeCanvas } from "qrcode.react";
 
 const Testing = () => {
-  const [blockedUsers, setBlockedUsers] = useState([
-    { id: 1, name: 'Sadia Hossain', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpBZBnpNcBrvaK_39KJtsMQbsb1KGIs1LeAw&s' },
-    { id: 2, name: 'Sadia Hossain', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpBZBnpNcBrvaK_39KJtsMQbsb1KGIs1LeAw&s' },
-    { id: 3, name: 'Sadia Hossain', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpBZBnpNcBrvaK_39KJtsMQbsb1KGIs1LeAw&s' },
-  ]);
+  const videoRef = useRef(null);
+  const [mode, setMode] = useState(null); 
+  const [cameraStarted, setCameraStarted] = useState(false);
 
-  const handleUnblock = (id) => {
-    setBlockedUsers(blockedUsers.filter(user => user.id !== id));
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  // Detect mobile route
+  useEffect(() => {
+    if (window.location.pathname === "/mobile") {
+      setMode("mobile");
+    }
+  }, []);
+
+  // Desktop start
+  const startFaceScan = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ video: true });
+      setMode("desktop-camera");
+    } catch {
+      setMode("qr");
+    }
   };
 
+  // Start camera ONLY after button click (important)
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: mode === "mobile" ? { facingMode: "user" } : true,
+      });
+      videoRef.current.srcObject = stream;
+      setCameraStarted(true);
+    } catch (err) {
+      alert("Camera permission denied");
+    }
+  };
+
+  // Capture image
+  const captureFace = () => {
+    const video = videoRef.current;
+    const canvas = document.createElement("canvas");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0);
+
+    canvas.toBlob((blob) => {
+      const file = new File([blob], "face-scan.png", {
+        type: "image/png",
+      });
+      console.log("✅ Captured Face File:", file);
+    });
+  };
+
+  // Auto mobile detect (but NOT auto camera start)
+  useEffect(() => {
+    if (isMobile && window.location.pathname === "/") {
+      setMode("mobile");
+    }
+  }, [isMobile]);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 bg-white mt-10">
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-[#58001C] mb-2">Report & Blocking</h2>
-        <p className="text-base leading-relaxed text-[#525252]">
-          In this section, you can report users who are violating our community guidelines or block individuals who are disruptive to your experience. 
-          Reporting is an important feature that helps maintain a safe environment for all users. When you report a user, our moderation team 
-          will review the issue and take necessary action. Blocking a user prevents them from messaging or interacting with your profile. 
-          You can unblock anyone at any time, giving you control over your connections and interactions. Please use these features responsibly 
-          to help keep the community safe and respectful.
-        </p>
-      </section>
-      <section>
-        <h3 className="text-xl font-semibold text-[#58001C]">Your Block List</h3>
-        
-        <div className="space-y-0">
-          {blockedUsers.map((user) => (
-            <div 
-              key={user.id} 
-              className="flex items-center justify-between py-4 border-b border-gray-100 last:border-0"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-200">
-                  <img 
-                    src={user.image} 
-                    alt={user.name} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-lg font-medium text-gray-800">{user.name}</span>
-              </div>
-              
-              <button 
-                onClick={() => handleUnblock(user.id)}
-                className="text-[#58001C] font-semibold cursor-pointer transition-all"
-              >
-                Unblock
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-      <div className="mt-12 flex justify-center">
-        <button className="bg-rose-700 hover:bg-rose-800 text-white font-bold py-3 px-12 rounded-full text-lg shadow-md transition-colors">
-          Save Changes
+    <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-gray-100 p-4">
+      <h1 className="text-2xl font-bold">Face Scanner</h1>
+
+      {/* Desktop start */}
+      {!mode && (
+        <button
+          onClick={startFaceScan}
+          className="bg-rose-500 text-white px-6 py-3 rounded-lg"
+        >
+          Start Face Scan
         </button>
-      </div>
+      )}
+
+      {/* Desktop camera */}
+      {mode === "desktop-camera" && (
+        <>
+          {!cameraStarted && (
+            <button
+              onClick={startCamera}
+              className="bg-blue-500 text-white px-6 py-2 rounded"
+            >
+              Start Camera
+            </button>
+          )}
+
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            className="w-80 rounded-lg shadow"
+          />
+
+          {cameraStarted && (
+            <button
+              onClick={captureFace}
+              className="bg-green-500 text-white px-6 py-2 rounded"
+            >
+              Capture
+            </button>
+          )}
+        </>
+      )}
+
+      {/* QR */}
+      {mode === "qr" && (
+        <div className="text-center">
+          <p className="mb-4 font-medium">
+            Desktop camera not found <br /> Scan with mobile
+          </p>
+          <QRCodeCanvas
+            value={`${window.location.origin}/mobile`}
+            size={200}
+          />
+        </div>
+      )}
+
+      {/* Mobile camera */}
+      {mode === "mobile" && (
+        <>
+          {!cameraStarted && (
+            <button
+              onClick={startCamera}
+              className="bg-blue-600 text-white px-6 py-2 rounded"
+            >
+              Start Mobile Camera
+            </button>
+          )}
+
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            className="w-80 rounded-lg shadow"
+          />
+
+          {cameraStarted && (
+            <button
+              onClick={captureFace}
+              className="bg-green-500 text-white px-6 py-2 rounded"
+            >
+              Capture Face
+            </button>
+          )}
+        </>
+      )}
     </div>
   );
 };
