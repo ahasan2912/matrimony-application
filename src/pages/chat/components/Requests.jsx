@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-const Requests = ({ messageData }) => {
+const Requests = ({ messageData, setActiveTab }) => {
     const navigate = useNavigate();
 
     const handleClickAcceted = () => {
-        navigate('/chatbox');
+        navigate('/chatlist');
+        setActiveTab('Messages');
     }
     return (
         <div className="divide-y divide-gray-200 overflow-x-auto max-w-full">

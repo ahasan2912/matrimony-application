@@ -46,9 +46,9 @@ const ChatList = () => {
                     </div>
                 </div>
                 <div className="pt-2">
-                    {activeTab === 'Messages' && <Messages messageData={messageData} />}
+                    {activeTab === 'Messages' && <Messages messageData={messageData} setActiveTab={setActiveTab} />}
                     {activeTab === 'Matches' && <Matches messageData={messageData} />}
-                    {activeTab === 'Requests' && <Requests messageData={messageData} />}
+                    {activeTab === 'Requests' && <Requests messageData={messageData} setActiveTab={setActiveTab}/>}
                 </div>
             </div>
         </div>

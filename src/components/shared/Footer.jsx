@@ -1,31 +1,64 @@
+import React from 'react';
+import { Mail, Phone, Facebook, Instagram, Youtube } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import youtubeIcon from '../../../public/images/svg/youtube.svg';
+import faceBookIcon from '../../../public/images/svg/facebook.svg';
+import instagramIcon from '../../../public/images/svg/instagram.svg';
 
 const Footer = () => {
     return (
-        <footer className="bg-pink-50/50 pt-12">
-            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12 pb-12">
-                <div>
-                    <div className="bg-[#FF2D55] text-white px-6 py-2 w-fit rounded-md mb-8 font-bold text-xl">Logo</div>
-                    <h3 className="font-bold text-lg mb-4">Contact Information:</h3>
-                    <p className="flex items-center gap-2 text-gray-700 mb-2">📧 Email: support@example.com</p>
-                    <p className="flex items-center gap-2 text-gray-700">📞 Phone: +1-234-567-8901</p>
-                </div>
+        <footer className="w-full font-sans">
+            <div className="bg-[#FFF0F3] px-4 py-12 md:px-16 lg:px-24">
+                <div className="max-w-7xl mx-auto">
+                    <div className="mb-10">
+                        <div className="bg-[#FF2D55] text-white inline-block px-8 py-2 text-xl font-semibold rounded-sm">
+                            Logo
+                        </div>
+                    </div>
 
-                <div className="flex flex-col gap-4 text-gray-600 font-medium">
-                    <a href="#">About Us</a>
-                    <a href="#">Terms & Conditions</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Help & Support</a>
-                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div className="space-y-4">
+                            <h3 className="text-[#58001C] font-bold text-2xl mb-4">Contact Information:</h3>
+                            <div className="flex items-center gap-2 text-[#630D21]">
+                                <Mail size={18} className="text-[#737373]" />
+                                <span className='text-[#737373]'>Email: <span className="text-[#B6003F]">support@example.com</span></span>
+                            </div>
+                            <div className="flex items-center gap-2 text-[#630D21]">
+                                <Phone size={18} className="text-[#737373]" />
+                                <span className='text-[#737373]'>Phone: <span className="text-[#B6003F]">+1-234-567-8901</span></span>
+                            </div>
+                        </div>
+                        <div className="flex flex-col space-y-4 text-gray-600 font-medium">
+                            <Link to="/" className="hover:text-[#FF2D55] transition-colors">About Us</Link>
+                            <Link to="/" className="hover:text-[#FF2D55] transition-colors">Contact US</Link>
+                            <Link to="/" className="hover:text-[#FF2D55] transition-colors">Terms & Conditions</Link>
+                        </div>
+                        <div className="flex flex-col space-y-4 text-gray-600 font-medium">
+                            <Link to="/" className="hover:text-[#FF2D55] transition-colors">Privacy Policy</Link>
+                            <Link to="/" className="hover:text-[#FF2D55] transition-colors">Help & Support</Link>
+                        </div>
 
-                <div className="flex gap-4 md:justify-end text-2xl text-[#B30042]">
-                    <i className="fab fa-facebook cursor-pointer"></i>
-                    <i className="fab fa-instagram cursor-pointer"></i>
-                    <i className="fab fa-youtube cursor-pointer"></i>
+                        <div className="flex md:justify-end gap-4">
+                            <Link to="#" className="text-[#B30030] hover:scale-110 transition-transform">
+                                <img src={faceBookIcon} alt="facebookIcon" />
+                            </Link>
+                            <Link to="#" className="text-[#B30030] hover:scale-110 transition-transform">
+                                <img src={instagramIcon} alt="instagramIcon" />
+                            </Link>
+                            <Link to="#" className="text-[#B30030] hover:scale-110 transition-transform mt-1">
+                                <img src={youtubeIcon} alt="youtubeIcon" />
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div className="bg-[#B30042] text-white py-4 text-center text-sm font-medium">
-                © 2026 Rishta Pro. All rights reserved.
+            <div className="bg-[#B30030] py-4 px-6 md:px-16 lg:px-24">
+                <div className="max-w-7xl mx-auto">
+                    <p className="text-white text-sm md:text-base">
+                        © {new Date().getFullYear()} Rishta Pro. All rights reserved.
+                    </p>
+                </div>
             </div>
         </footer>
     );

@@ -289,7 +289,6 @@ const ProfileCreate = () => {
                             Continue
                         </button>
                     </div>
-
                 </form>
             </div>
         </div>
