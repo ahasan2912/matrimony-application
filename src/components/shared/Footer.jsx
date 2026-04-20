@@ -4,16 +4,17 @@ import { Link } from 'react-router-dom';
 import youtubeIcon from '../../../public/images/svg/youtube.svg';
 import faceBookIcon from '../../../public/images/svg/facebook.svg';
 import instagramIcon from '../../../public/images/svg/instagram.svg';
+import { images } from '../../../public/image';
 
 const Footer = () => {
     return (
         <footer className="w-full font-sans">
             <div className="bg-[#FFF0F3] px-4 py-12 md:px-16 lg:px-24">
                 <div className="max-w-7xl mx-auto">
-                    <div className="mb-10">
-                        <div className="bg-[#FF2D55] text-white inline-block px-8 py-2 text-xl font-semibold rounded-sm">
-                            Logo
-                        </div>
+                    <div className="max-w-23">
+                        <Link to='/metches' className="max-w-23">
+                            <img src={images.logo} className='w-full h-fit' alt="applicaiton_logo" />
+                        </Link>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

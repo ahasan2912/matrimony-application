@@ -56,13 +56,12 @@ const Navbar = () => {
 
     return (
         <nav ref={menuRef} className="bg-[#FFF1F3] py-4 shadow-sm sticky top-0 z-40 notranslate">
-            <div className="max-w-7xl mx-auto flex items-center justify-between px-4 relative">
-                <div className="flex items-center">
-                    <div className="bg-[#FF2D55] text-white px-6 py-2 rounded-md font-bold text-xl cursor-pointer">
-                        Logo
-                    </div>
+            <div className="max-w-7xl mx-auto flex items-center px-4 justify-between relative">
+                <div className="max-w-23">
+                    <Link to='/metches' className="max-w-23">
+                        <img src={images.logo} className='w-full h-fit' alt="applicaiton_logo" />
+                    </Link>
                 </div>
-
                 <div className="hidden lg:flex items-center space-x-5">
                     {navLinks.map((link) => (
                         <NavLink to={link.href}

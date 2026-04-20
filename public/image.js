@@ -24,7 +24,7 @@ import ahasanImage from './images/ahasan.png';
 import naverUser from './images/svg/navaruser.svg';
 import navernotification from './images/svg/notification.svg';
 import queenIcon from './images/svg/queenIcon.svg';
-import logo from './images/svg/logo.svg';
+import logo from './images/logo.png';
 
 export const images = {
     loveIcon,
