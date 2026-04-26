@@ -1,9 +1,8 @@
-import Register from "../auth/Register";
-
+import OAuthLogin from "../auth/OAuthLogin";
 const Home = () => {
     return (
         <div>
-            <Register />
+            <OAuthLogin />
         </div>
     );
 };

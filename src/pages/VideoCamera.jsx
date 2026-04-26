@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
-const Testing = () => {
+const VideoCamera = () => {
   const videoRef = useRef(null);
-  const [mode, setMode] = useState(null); 
+  const [mode, setMode] = useState(null);
   const [cameraStarted, setCameraStarted] = useState(false);
-
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   // Detect mobile route
   useEffect(() => {
-    if (window.location.pathname === "/mobile") {
-      setMode("mobile");
+    const func = () => {
+      if (window.location.pathname === "/mobile") {
+        setMode("mobile");
+      }
     }
+    func();
   }, []);
 
   // Desktop start
@@ -34,7 +36,7 @@ const Testing = () => {
       videoRef.current.srcObject = stream;
       setCameraStarted(true);
     } catch (err) {
-      alert("Camera permission denied");
+      alert("Camera permission denied", err.message);
     }
   };
 
@@ -59,9 +61,12 @@ const Testing = () => {
 
   // Auto mobile detect (but NOT auto camera start)
   useEffect(() => {
-    if (isMobile && window.location.pathname === "/") {
-      setMode("mobile");
+    const func = () => {
+      if (isMobile) {
+        setMode("mobile");
+      }
     }
+    func();
   }, [isMobile]);
 
   return (
@@ -156,4 +161,4 @@ const Testing = () => {
   );
 };
 
-export default Testing;
+export default VideoCamera;

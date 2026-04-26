@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
 import { images } from '../../../public/image';
 
-const Register = () => {
+const OAuthLogin = () => {
     const navigate = useNavigate();
     const handleAppleAccout = () => {
         navigate('/phonenumber');
@@ -29,12 +29,12 @@ const Register = () => {
                     </p>
 
                     <div className="space-y-4">
-                        <button onClick={handleAppleAccout} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
+                        <button onClick={handleAppleAccout} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
                             <img src={images.appleIcon} alt="appleIcon" />
                             <span className="font-medium text-lg text-[#FFFFFF]">Continue with Apple</span>
                         </button>
 
-                        <button onClick={handleGoogleAccout} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
+                        <button onClick={handleGoogleAccout} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
                             <img src={images.googleIcon} alt="googleIcon" />
                             <span className="font-medium text-lg text-[#FFFFFF]">Continue with Google</span>
                         </button>
@@ -49,4 +49,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default OAuthLogin;

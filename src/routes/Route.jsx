@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/home/Home";
-import Register from "../pages/auth/Register";
 import Testing from "../pages/Testing";
 import DashboardLayout from "../layout/DashboardLayout";
 import Dashboard from "../pages/dashboard/Dashboard";
@@ -26,20 +25,23 @@ import ParentVerify from "../pages/verification/ParentVerify";
 import ProfilePriview from "../pages/preview/ProfilePriview";
 import ViewUserProfile from "../pages/viewUserProfile/ViewUserProfile";
 import BlockPage from "../pages/blcokpage/BlockPage";
+import OAuthLogin from "../pages/auth/OAuthLogin";
+import ErrorPage from "../pages/ErrorPage";
+import VideoCamera from "../pages/VideoCamera";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
-        errorElement: <div>Error Page ...........</div>,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "/",
                 element: <Home />,
             },
             {
-                path: "/register",
-                element: <Register />,
+                path: "/oauthlogin",
+                element: <OAuthLogin />,
             },
             {
                 path: "/phonenumber",
@@ -126,6 +128,10 @@ const router = createBrowserRouter([
                 element: <BlockPage/>
             },
             {
+                path: "/video-camera",
+                element: <VideoCamera />
+            },
+            {
                 path: "/testing",
                 element: <Testing />
             },
@@ -144,3 +150,5 @@ const router = createBrowserRouter([
 ]);
 
 export default router;
+
+

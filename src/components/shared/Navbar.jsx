@@ -55,7 +55,7 @@ const Navbar = () => {
     // '/subcribtion'
 
     return (
-        <nav ref={menuRef} className="bg-[#FFF1F3] py-4 shadow-sm sticky top-0 z-40 notranslate">
+        <nav ref={menuRef} className="bg-[#FFF1F3] py-2 shadow-sm sticky top-0 z-40 notranslate">
             <div className="max-w-7xl mx-auto flex items-center px-4 justify-between relative">
                 <div className="max-w-23">
                     <Link to='/metches' className="max-w-23">

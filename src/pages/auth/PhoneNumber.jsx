@@ -1,56 +1,95 @@
-import { Link, useNavigate } from 'react-router-dom';
-import loveIcon from '../../../public/images/svg/loveIcon.svg';
-import AuthSidebar from '../../components/authSidebar/AuthSidebar';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import AuthSidebar from '../../components/authSidebar/AuthSidebar';
 import { images } from '../../../public/image';
 
+const MIN_PHONE_DIGITS = 8;
+const MAX_PHONE_DIGITS = 15;
+
 const PhoneNumber = () => {
-    const [number, setNumber] = useState('');
     const navigate = useNavigate();
-    const handleClickContinue = () => {
-        navigate('/verfication');
-    }
+    const [phone, setPhone] = useState('');
+    const [formattedPhone, setFormattedPhone] = useState('');
+    const [error, setError] = useState('');
+
+    const handlePhoneChange = (value, _country, _event, formattedValue) => {
+        setPhone(value);
+        setFormattedPhone(formattedValue || `+${value}`);
+
+        if (error) {
+            setError('');
+        }
+    };
+
+    const handleContinue = () => {
+        const digitsOnly = phone.replace(/\D/g, '');
+
+        if (digitsOnly.length < MIN_PHONE_DIGITS || digitsOnly.length > MAX_PHONE_DIGITS) {
+            setError('Please enter a valid phone number.');
+            return;
+        }
+
+        navigate('/verfication', {
+            state: {
+                phone: formattedPhone || `+${phone}`,
+            },
+        });
+    };
+
     return (
-        <div className="flex flex-col md:flex-row min-h-screen font-sans bg-white">
-
+        <div className="flex flex-col md:flex-row min-h-screen relative">
             <AuthSidebar />
-            <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-2 sm:p-6 relative overflow-hidden">
-                <img src={loveIcon} className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
-                <img src={loveIcon} className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
+            <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-2 sm:p-6 relative">
+                <img src={images.loveIcon} alt="" className="hidden sm:block absolute top-10 left-10 text-pink-100 text-6xl" />
+                <img src={images.loveIcon} alt="" className="hidden sm:block absolute bottom-20 right-20 text-pink-100 text-4xl" />
 
-                <div className="w-full max-w-lg bg-[#FFEFF1] rounded-xl px-2 sm:px-8 py-6 md:px-8 md:py-12 text-center border border-pink-100 mt-5 sm:0">
+                <div className="w-full max-w-lg bg-[#FFEFF1] rounded-2xl px-4 py-8 md:px-12 md:py-12 text-center border border-pink-100 mt-5 sm:mt-0">
                     <h2 className="text-[32px] font-bold text-[#B6003F] mb-4">
                         Enter Your Phone Number
                     </h2>
-                    <p className="text-[#737373] text-lg mb-8">
-                        Create your profile and begin your journey to finding the perfect match!
+                    <p className="text-[#737373] text-lg font-medium mb-8">
+                        We&apos;ll send a verification code to your mobile number.
                     </p>
-                    <div className="flex items-center justify-center">
-                        <div className="flex w-full max-w-md bg-white border-2 border-gray-400 rounded-xl overflow-hidden shadow-sm">
-                            <div className="flex items-center gap-2 px-2 py-3 bg-white border-r border-gray-400">
-                                <div className="w-8 h-6 overflow-hidden rounded-sm flex items-center justify-center">
-                                    <img
-                                        src={images.pakistanFalg}
-                                        alt="Pakistan Flag"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <span className="text-lg sm:text-xl font-semibold text-gray-800">+92</span>
-                            </div>
-                            <div className="flex pl-4 py-3">
-                                <input
-                                    type="tel"
-                                    value={number}
-                                    onChange={(e) => setNumber(e.target.value)}
-                                    placeholder="123 456 789"
-                                    className="text-lg sm:text-xl font-semibold text-gray-800 bg-transparent outline-none placeholder-gray-400"
-                                />
-                            </div>
-                        </div>
+
+                    <div className="text-left">
+                        <label className="block text-[#58001C] text-sm font-semibold mb-3">
+                            Mobile number
+                        </label>
+                        <PhoneInput
+                            country="pk"
+                            enableSearch
+                            countryCodeEditable={false}
+                            value={phone}
+                            onChange={handlePhoneChange}
+                            placeholder="Enter your phone number"
+                            inputClass="!w-full !h-14 !rounded-full !border !border-pink-200 !bg-white !pl-16 !pr-4 !text-base !text-[#58001C] focus:!border-[#B30042] focus:!shadow-none"
+                            buttonClass="!border-none !bg-transparent !pl-4 !rounded-l-full"
+                            containerClass="!w-full"
+                        />
+
+                        <p className="text-sm text-[#737373] mt-3">
+                            Select your country code and enter your number.
+                        </p>
+                        {error ? (
+                            <p className="text-sm text-red-500 mt-2">{error}</p>
+                        ) : null}
                     </div>
-                    <button onClick={handleClickContinue} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer font-medium text-lg mt-6">
-                        Continue
-                    </button>
+
+                    <div className="space-y-4 mt-8">
+                        <button
+                            type="button"
+                            onClick={handleContinue}
+                            className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-4 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer outline-0"
+                        >
+                            <span className="font-medium text-lg text-[#FFFFFF]">Continue</span>
+                        </button>
+                    </div>
+
+                    <p className="mt-8 text-[#58001C]">
+                        Already have an account? <Link to="/" className="text-[#FF225E] font-bold hover:underline">Sign in</Link>
+                    </p>
                 </div>
             </div>
         </div>

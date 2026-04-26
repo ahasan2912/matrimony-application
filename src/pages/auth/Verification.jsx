@@ -7,7 +7,7 @@ const Verification = () => {
     const [otp, setOtp] = useState("");
     const inputRef = useRef(null);
     const navigate = useNavigate();
-
+   
     const handleChange = (e) => {
         const value = e.target.value.slice(0, OTP_LENGTH);
         setOtp(value);
@@ -16,7 +16,7 @@ const Verification = () => {
     const handlePaste = (e) => {
         e.preventDefault();
         const pasted = e.clipboardData
-            .getData("text") //if any change type(number chnage here)
+            .getData("text")
             .slice(0, OTP_LENGTH);
         setOtp(pasted);
     };
@@ -40,7 +40,7 @@ const Verification = () => {
                     <h2 className="text-[32px] font-bold text-[#B6003F] mb-3">
                         Enter Verification Code
                     </h2>
-                    <p className='text-[#737373] text-base mb-2'>Please enter the 6-digit code sent to +1 123 456 789 </p>
+                    <p className='text-[#737373] text-base mb-2'>Please enter the 6-digit code sent to </p>
                     {/* input field */}
                     <div className="flex justify-center gap-2 cursor-text">
                         {Array.from({ length: OTP_LENGTH }).map((_, index) => (
