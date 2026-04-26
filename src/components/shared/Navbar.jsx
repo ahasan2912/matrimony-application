@@ -33,6 +33,7 @@ const Navbar = () => {
         { name: 'Chat', href: '/chatlist' },
         { name: 'Marriage Counselling', href: '/marriageCounselling' },
         { name: 'Verification', href: '/verificationpage' },
+        { name: 'Video Camera', href: '/video-camera' },
     ];
 
     useEffect(() => {
