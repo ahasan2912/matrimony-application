@@ -10,7 +10,7 @@ const VideoCamera = () => {
   // Detect mobile route
   useEffect(() => {
     const func = () => {
-      if (window.location.pathname === "/mobile") {
+      if (window.location.pathname === "/video-camera") {
         setMode("mobile");
       }
     }
@@ -36,7 +36,7 @@ const VideoCamera = () => {
       videoRef.current.srcObject = stream;
       setCameraStarted(true);
     } catch (err) {
-      alert("Camera permission denied", err.message);
+      console.log("Camera permission denied", err.message);
     }
   };
 
@@ -55,7 +55,7 @@ const VideoCamera = () => {
       const file = new File([blob], "face-scan.png", {
         type: "image/png",
       });
-      console.log("✅ Captured Face File:", file);
+      console.log("âœ… Captured Face File:", file);
     });
   };
 
@@ -121,7 +121,7 @@ const VideoCamera = () => {
             Desktop camera not found <br /> Scan with mobile
           </p>
           <QRCodeCanvas
-            value={`${window.location.origin}/mobile`}
+            value={`${window.location.origin}/video-camera`}
             size={200}
           />
         </div>
