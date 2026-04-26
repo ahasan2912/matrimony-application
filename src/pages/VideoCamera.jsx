@@ -10,7 +10,7 @@ const VideoCamera = () => {
   // Detect mobile route
   useEffect(() => {
     const func = () => {
-      if (window.location.pathname === "/video-camera") {
+      if (window.location.pathname === "/mobile") {
         setMode("mobile");
       }
     }
