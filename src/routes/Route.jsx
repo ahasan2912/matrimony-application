@@ -28,6 +28,7 @@ import BlockPage from "../pages/blcokpage/BlockPage";
 import OAuthLogin from "../pages/auth/OAuthLogin";
 import ErrorPage from "../pages/ErrorPage";
 import VideoCamera from "../pages/VideoCamera";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -45,11 +46,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/phonenumber",
-                element: <PhoneNumber />,
+                element: <PrivateRoute><PhoneNumber /></PrivateRoute>,
             },
             {
                 path: "/verfication",
-                element: <Verification />
+                element:<PrivateRoute><Verification /></PrivateRoute>,
             },
             {
                 path: "/createprofile",
@@ -105,27 +106,27 @@ const router = createBrowserRouter([
             },
             {
                 path: "/passportVerify",
-                element: <PassportVerify/>
+                element: <PassportVerify />
             },
             {
                 path: "/educationVerify",
-                element: <EducationVerify/>
+                element: <EducationVerify />
             },
             {
                 path: "/parentVerify",
-                element: <ParentVerify/>
+                element: <ParentVerify />
             },
             {
                 path: "/profilePreview",
-                element: <ProfilePriview/>
+                element: <ProfilePriview />
             },
             {
                 path: "/viewuserprofile",
-                element: <ViewUserProfile/>
+                element: <ViewUserProfile />
             },
             {
                 path: "/blockpage",
-                element: <BlockPage/>
+                element: <BlockPage />
             },
             {
                 path: "/video-camera",

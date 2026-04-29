@@ -1,8 +1,13 @@
 import { PencilLine, Settings, AlertTriangle, ChevronRight } from 'lucide-react';
 import { images } from '../../../public/image';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const ProfileCard = ({ menuRef }) => {
+    const { user } = useSelector((state) => state.auth);
+    
+    
+
     return (
         <div ref={menuRef} className="flex justify-center items-center p-4 absolute right-0 top-16 z-50">
             <div className="w-full  bg-linear-to-b from-[#F5F5F5] to-[#FFEFF1] rounded-xl shadow-sm border border-[#737373] p-5 transition-all duration-500 ease-out">
@@ -10,7 +15,7 @@ const ProfileCard = ({ menuRef }) => {
                     <div className="relative">
                         <div className="w-14 h-14 rounded-full border-2 border-pink-600 p-0.5">
                             <img
-                                src={images.ahasanImage}
+                                src={user?.picture || user?.ahasanImage}
                                 alt="Profile"
                                 className="w-full h-full rounded-full object-cover"
                             />
@@ -18,7 +23,7 @@ const ProfileCard = ({ menuRef }) => {
                     </div>
                     <div>
                         <div className="flex items-center gap-1.5">
-                            <h2 className="text-xl font-semibold text-gray-800">Ahsan Habib</h2>
+                            <h2 className="text-xl font-semibold text-gray-800">{user?.full_name}</h2>
                             <img src={images.verified} alt="verifiedIcon" />
                         </div>
                         <Link to='/profilePreview' className="flex items-center text-[#737373] text-base hover:text-gray-700 transition-colors mt-1.5">

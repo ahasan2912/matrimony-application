@@ -8,15 +8,17 @@ import { Provider } from 'react-redux'
 import { persistor, store } from './app/store.js'
 import { Toaster } from 'react-hot-toast'
 import GoogleTranslator from './components/shared/GoogleTranslator.jsx';
+import InitialPageLoader from './components/loading- skeletons/InitialPageLoader.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <GoogleTranslator />
+      <PersistGate loading={<InitialPageLoader />} persistor={persistor}>
         <RouterProvider router={router} />
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-right" reverseOrder={false} />
       </PersistGate>
     </Provider>
-  </React.StrictMode>
+  </StrictMode>
 )
+
+

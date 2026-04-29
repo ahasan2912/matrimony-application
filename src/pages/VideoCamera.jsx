@@ -67,7 +67,7 @@ const VideoCamera = () => {
       }
     }
     func();
-  }, [isMobile]);
+  }, [isMobile]); 
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-gray-100 p-4">

@@ -3,22 +3,14 @@ import { Link, NavLink } from 'react-router-dom';
 import { images } from '../../../public/image';
 import { User } from 'lucide-react';
 import ProfileCard from './ProfileCard';
-
-// For google translator
-const getCurrentLanguage = () => {
-    const match = document.cookie.match(/googtrans=\/en\/(\w+)/);
-    return match ? match[1] : "en";
-};
-
+import { getCurrentLanguage } from '../../lib/getCurrentLanguage';
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const menuRef = useRef(null);
-    /* language */
-    const currentLang = getCurrentLanguage();
+    const currentLang = getCurrentLanguage(); //language
     const changeLanguage = (lang) => {
         const path = window.location.pathname;
-
         if (lang === "en") {
             document.cookie =
                 "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -27,6 +19,7 @@ const Navbar = () => {
         }
         window.location.href = path;
     };
+
     const navLinks = [
         { name: 'Mathces', href: '/metches' },
         { name: 'Discover', href: '/discover' },
@@ -42,9 +35,7 @@ const Navbar = () => {
                 setShowProfile(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -53,16 +44,16 @@ const Navbar = () => {
     const handleClickProfile = () => {
         setShowProfile(true);
     }
-    // '/subcribtion'
+    
 
     return (
         <nav ref={menuRef} className="bg-[#FFF1F3] py-2 shadow-sm sticky top-0 z-40 notranslate">
             <div className="max-w-7xl mx-auto flex items-center px-4 justify-between relative">
-                {/* <div className="max-w-23">
+                <div className="max-w-23">
                     <Link to='/metches' className="max-w-23">
                         <img src={images.logo} className='w-full h-fit' alt="applicaiton_logo" />
                     </Link>
-                </div> */}
+                </div>
                 <div className="hidden lg:flex items-center space-x-5">
                     {navLinks.map((link) => (
                         <NavLink to={link.href}

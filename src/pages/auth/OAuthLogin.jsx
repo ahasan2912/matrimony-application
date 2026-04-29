@@ -1,16 +1,43 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AuthSidebar from '../../components/authSidebar/AuthSidebar';
 import { images } from '../../../public/image';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { saveTokensAndFetchUser } from '../../features/auth/saveToken';
+
 
 const OAuthLogin = () => {
+    const dispatch = useDispatch();
+    const location = useLocation();
     const navigate = useNavigate();
-    const handleAppleAccout = () => {
-        navigate('/phonenumber');
-    }
+    const params = new URLSearchParams(location.search);
+    const accessToken = params.get("access");
+    const refreshToken = params.get("refresh");
+    const { user } = useSelector((state) => state.auth);
 
-    const handleGoogleAccout = () => {
-        navigate('/phonenumber');
-    }
+    // google and apple authoraization handdling
+    useEffect(() => {
+        if (accessToken || refreshToken) {
+            const tokens = {
+                accessToken,
+                refreshToken
+            }
+            saveTokensAndFetchUser(tokens, dispatch);
+        }
+    }, [accessToken, refreshToken, dispatch]);
+
+    useEffect(() => {
+        if (!user) return;
+
+        if (user) {
+            navigate("/phonenumber");
+        }
+
+    }, [user, navigate]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen relative">
@@ -29,15 +56,15 @@ const OAuthLogin = () => {
                     </p>
 
                     <div className="space-y-4">
-                        <button onClick={handleAppleAccout} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
+                        <Link to='/' className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
                             <img src={images.appleIcon} alt="appleIcon" />
                             <span className="font-medium text-lg text-[#FFFFFF]">Continue with Apple</span>
-                        </button>
+                        </Link>
 
-                        <button onClick={handleGoogleAccout} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
+                        <Link to='https://gastrotomic-squirrelly-yuonne.ngrok-free.dev/api/v1/auth/google' className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
                             <img src={images.googleIcon} alt="googleIcon" />
                             <span className="font-medium text-lg text-[#FFFFFF]">Continue with Google</span>
-                        </button>
+                        </Link>
                     </div>
 
                     <p className="mt-8 text-[#58001C]">
