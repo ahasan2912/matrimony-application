@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import {
-  ChevronLeft, ChevronRight, MapPin,
-  Briefcase, Moon, Heart, X, RotateCcw, MessageCircle, GraduationCap, ShieldCheck,
+    ChevronLeft, ChevronRight, MapPin,
+    Briefcase, Moon, Heart, X, RotateCcw, MessageCircle, GraduationCap, ShieldCheck,
 } from 'lucide-react';
 import { images, interestsItem } from '../../data/data';
 import { images as Icon } from '../../../public/image';
 import SectionTitle from './components/SectionTitle';
 import Badge from './components/Badge';
+import { useSelector } from 'react-redux';
 
 const Matches = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const { userInfo } = useSelector((state) => state?.user);
 
     const nextImage = () => {
         setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
@@ -18,6 +20,8 @@ const Matches = () => {
     const prevImage = () => {
         setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
+
+    console.log(userInfo);
 
     return (
         <div className="max-w-7xl mx-auto bg-white rounded-[20px] flex flex-col md:flex-row gap-8 text-gray-800 my-12.5 px-4">

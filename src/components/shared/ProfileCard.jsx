@@ -1,12 +1,31 @@
 import { PencilLine, Settings, AlertTriangle, ChevronRight } from 'lucide-react';
 import { images } from '../../../public/image';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLoggedOut } from '../../features/auth/authSlice';
+import Cookies from "js-cookie";
+import toast from 'react-hot-toast';
+import { persistor } from '../../app/store';
 
 const ProfileCard = ({ menuRef }) => {
+    const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
-    
-    
+    const navigate = useNavigate();
+
+    const hanldeLogOut = async () => {
+        dispatch(userLoggedOut());
+
+        Cookies.remove("accessToken", {
+            secure: false,
+            sameSite: "Strict",
+            path: "/",
+        });
+        toast.success("Logout successfully");
+        await persistor.flush();
+        await persistor.purge();
+
+        navigate('/');
+    }
 
     return (
         <div ref={menuRef} className="flex justify-center items-center p-4 absolute right-0 top-16 z-50">
@@ -61,9 +80,9 @@ const ProfileCard = ({ menuRef }) => {
                     </Link>
                 </div>
                 <div className="mt-6">
-                    <Link className="bg-[#b3003b] hover:bg-[#900030] text-white font-bold py-2.5 px-8 rounded-full transition-all active:scale-95">
+                    <div onClick={hanldeLogOut} className="bg-[#b3003b] hover:bg-[#900030] text-white text-center font-bold py-2.5 px-8 rounded-full transition-all active:scale-95">
                         Log Out
-                    </Link>
+                    </div>
                 </div>
             </div>
         </div>

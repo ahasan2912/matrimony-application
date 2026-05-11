@@ -46,11 +46,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/phonenumber",
-                element: <PrivateRoute><PhoneNumber /></PrivateRoute>,
+                element: <PhoneNumber />,
             },
             {
                 path: "/verfication",
-                element:<PrivateRoute><Verification /></PrivateRoute>,
+                element:<Verification />,
             },
             {
                 path: "/createprofile",

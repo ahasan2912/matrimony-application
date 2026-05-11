@@ -3,22 +3,21 @@ import { Link, NavLink } from 'react-router-dom';
 import { images } from '../../../public/image';
 import { User } from 'lucide-react';
 import ProfileCard from './ProfileCard';
-import { getCurrentLanguage } from '../../lib/getCurrentLanguage';
+// import { getCurrentLanguage, setGoogleTranslateLanguage } from '../../lib/getCurrentLanguage';
+import { useSelector } from 'react-redux';
+import Cookies from "js-cookie";
+
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const menuRef = useRef(null);
-    const currentLang = getCurrentLanguage(); //language
-    const changeLanguage = (lang) => {
-        const path = window.location.pathname;
-        if (lang === "en") {
-            document.cookie =
-                "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        } else {
-            document.cookie = `googtrans=/en/${lang}; path=/`;
-        }
-        window.location.href = path;
-    };
+    const { user } = useSelector((state) => state?.auth);
+    // const currentLang = getCurrentLanguage(); //language
+    const token = Cookies.get("accessToken");
+    // const changeLanguage = (lang) => {
+    //     setGoogleTranslateLanguage(lang);
+    //     window.location.reload();
+    // };
 
     const navLinks = [
         { name: 'Mathces', href: '/metches' },
@@ -43,8 +42,7 @@ const Navbar = () => {
 
     const handleClickProfile = () => {
         setShowProfile(true);
-    }
-    
+    };
 
     return (
         <nav ref={menuRef} className="bg-[#FFF1F3] py-2 shadow-sm sticky top-0 z-40 notranslate">
@@ -72,7 +70,7 @@ const Navbar = () => {
                             </button>
                         </Link>
                         {/* Language */}
-                        <select
+                        {/* <select
                             value={currentLang}
                             onChange={(e) => changeLanguage(e.target.value)}
                             className="px-3 py-2.5 rounded-lg bg-white font-medium text-gray-700 text-base cursor-pointer border border-gray-300">
@@ -80,32 +78,34 @@ const Navbar = () => {
                             <option value="bn">Bangla</option>
                             <option value="ur">Urdu</option>
                             <option value="ar">Arabic</option>
-                        </select>
-                        <div className="flex items-center space-x-8 text-[#8E1B3E]">
-                            <button className="hover:scale-110 transition-transform cursor-pointer">
-                                <img src={images.navernotification} alt="navernotification" />
-                            </button>
-                            <button onClick={handleClickProfile} className="hover:scale-110 transition-transform cursor-pointer">
-                                <User size={28} />
-                            </button>
-                        </div>
+                        </select> */}
+                        {
+                            user && token && <div className="flex items-center space-x-8 text-[#8E1B3E]">
+                                <button className="hover:scale-110 transition-transform cursor-pointer">
+                                    <img src={images.navernotification} alt="navernotification" />
+                                </button>
+                                <button onClick={handleClickProfile} className="hover:scale-110 transition-transform cursor-pointer">
+                                    <User size={28} />
+                                </button>
+                            </div>
+                        }
                     </div>
                 </div>
                 {
                     showProfile && <ProfileCard menuRef={menuRef} />
-
                 }
                 <div className="lg:hidden flex items-center">
                     <div className='flex items-center gap-2'>
                         {/* Language */}
-                        <select
+                        {/* <select
                             value={currentLang}
                             onChange={(e) => changeLanguage(e.target.value)}
                             className="px-3 py-2.5 rounded-lg bg-white font-medium text-gray-700 text-base cursor-pointer border border-gray-300">
                             <option value="en">English</option>
                             <option value="bn">Bangla</option>
                             <option value="ur">Urdu</option>
-                        </select>
+                            <option value="ar">Arabic</option>
+                        </select> */}
                     </div>
                     <button
                         onClick={() => setIsOpen(!isOpen)}

@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { PersistGate } from "redux-persist/integration/react";
@@ -13,6 +13,7 @@ import InitialPageLoader from './components/loading- skeletons/InitialPageLoader
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
+      <GoogleTranslator />
       <PersistGate loading={<InitialPageLoader />} persistor={persistor}>
         <RouterProvider router={router} />
         <Toaster position="top-right" reverseOrder={false} />

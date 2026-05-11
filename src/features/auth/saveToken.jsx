@@ -3,16 +3,9 @@ import { userLoggedIn } from "./authSlice";
 import { authApi } from "./authApi";
 
 export const saveTokensAndFetchUser = async (tokens, dispatch) => {
-    const { accessToken, refreshToken } = tokens;
-    console.log(accessToken, refreshToken);
-    
-    Cookies.set("accessToken", accessToken, {
-        expires: 5,
-        secure: false,
-        sameSite: "Strict",
-    });
+    const { accessToken } = tokens;
 
-    Cookies.set("refreshToken", refreshToken, {
+    Cookies.set("accessToken", accessToken, {
         expires: 5,
         secure: false,
         sameSite: "Strict",
@@ -25,7 +18,7 @@ export const saveTokensAndFetchUser = async (tokens, dispatch) => {
     ).unwrap();
 
     const user = userResponse?.data;
-   
+
     if (user) {
         dispatch(userLoggedIn(user));
     }

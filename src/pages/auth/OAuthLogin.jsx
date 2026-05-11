@@ -4,7 +4,7 @@ import { images } from '../../../public/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { saveTokensAndFetchUser } from '../../features/auth/saveToken';
-
+import Cookies from "js-cookie";
 
 const OAuthLogin = () => {
     const dispatch = useDispatch();
@@ -12,19 +12,18 @@ const OAuthLogin = () => {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const accessToken = params.get("access");
-    const refreshToken = params.get("refresh");
     const { user } = useSelector((state) => state.auth);
+    const baseUrl = import.meta.env.VITE_BASE_URL;
 
     // google and apple authoraization handdling
     useEffect(() => {
-        if (accessToken || refreshToken) {
+        if (accessToken) {
             const tokens = {
                 accessToken,
-                refreshToken
             }
             saveTokensAndFetchUser(tokens, dispatch);
         }
-    }, [accessToken, refreshToken, dispatch]);
+    }, [accessToken, dispatch]);
 
     useEffect(() => {
         if (!user) return;
@@ -38,6 +37,11 @@ const OAuthLogin = () => {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
+
+    const isMobile =
+        /Mobi|Android|iPhone|iPad|iPod/i.test(
+            navigator.userAgent
+        );
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen relative">
@@ -61,7 +65,7 @@ const OAuthLogin = () => {
                             <span className="font-medium text-lg text-[#FFFFFF]">Continue with Apple</span>
                         </Link>
 
-                        <Link to='https://gastrotomic-squirrelly-yuonne.ngrok-free.dev/api/v1/auth/google' className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
+                        <Link to={`${baseUrl}/auth/google?mobile=${isMobile}`} className="w-full bg-[#B30042] hover:bg-[#900035] text-white py-3 sm:py-3.5 rounded-full flex items-center justify-center space-x-3 transition-colors cursor-pointer">
                             <img src={images.googleIcon} alt="googleIcon" />
                             <span className="font-medium text-lg text-[#FFFFFF]">Continue with Google</span>
                         </Link>
