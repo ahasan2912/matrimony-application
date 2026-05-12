@@ -8,10 +8,18 @@ import { images as Icon } from '../../../public/image';
 import SectionTitle from './components/SectionTitle';
 import Badge from './components/Badge';
 import { useSelector } from 'react-redux';
+import { useGetMyCandidateDataQuery } from '../../features/candidates/candidates';
 
 const Matches = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const { userInfo } = useSelector((state) => state?.user);
+    const { data: candidateData, isLoading } = useGetMyCandidateDataQuery();
+
+    if (isLoading) {
+        return <p>Loading.........</p>
+    }
+
+    console.log(candidateData?.data);
 
     const nextImage = () => {
         setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));

@@ -23,7 +23,6 @@ const ProfileCard = ({ menuRef }) => {
         toast.success("Logout successfully");
         await persistor.flush();
         await persistor.purge();
-
         navigate('/');
     }
 

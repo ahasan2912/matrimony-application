@@ -1,32 +1,236 @@
-import { ChevronDown, Map, MapPin } from "lucide-react";
+import { ChevronDown, MapPin } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import HeadingTitle from "../../components/home/HeadingTitle";
 import loveIcon from '../../../public/images/svg/loveIcon.svg';
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userInformation } from "../../features/user/userSlice";
 import useUserLocation from "../../hooks/useUserLocation";
-import { relationToUserLabels } from "../../constants/relationToUserLabels";
+import { useGetAllConstantDataQuery } from "../../features/constantdata/constantApi";
+import ProfileFormSkeleton from "../../components/loading-skeleton/ProfileFormSkeleton";
+import { useNavigate } from "react-router-dom";
+
+const emptyOptions = [];
+const emptyConstantData = {};
+
+const defaultFormValues = {
+    profileType: "",
+    fullName: "",
+    dob: "",
+    gender: "male",
+    height: "",
+    religion: "",
+    sect: "",
+    cast: "",
+    address: "",
+    status: "",
+    children: "",
+    occupation: "",
+    highestEducation: "",
+    moveAbroad: "",
+};
+
+const toOptionArray = (options) => {
+    if (Array.isArray(options)) {
+        return options;
+    }
+
+    if (options && typeof options === "object") {
+        return Object.values(options);
+    }
+
+    return [];
+};
+
+const getOptionProperty = (option, keys) => {
+    if (!option || typeof option !== "object") {
+        return "";
+    }
+
+    const matchedKey = keys.find((key) => option[key] !== undefined && option[key] !== null && option[key] !== "");
+    return matchedKey ? option[matchedKey] : "";
+};
+
+const getOptionValue = (option) => {
+    if (option === null || option === undefined) {
+        return "";
+    }
+
+    if (typeof option !== "object") {
+        return String(option);
+    }
+
+    return String(
+        getOptionProperty(option, [
+            "value",
+            "slug",
+            "name",
+            "title",
+            "label",
+            "religion",
+            "sect",
+            "caste",
+            "relation",
+            "relationship",
+            "status",
+            "childrenStatus",
+            "children_status",
+            "occupation",
+            "education",
+            "highestEducation",
+            "highest_education",
+            "_id",
+            "id",
+        ])
+    );
+};
+
+const formatOptionLabel = (value) => {
+    const label = String(value).replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim();
+
+    return label.replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const getOptionLabel = (option) => {
+    if (option === null || option === undefined) {
+        return "";
+    }
+
+    if (typeof option !== "object") {
+        return formatOptionLabel(option);
+    }
+
+    return formatOptionLabel(
+        getOptionProperty(option, [
+            "label",
+            "name",
+            "title",
+            "displayName",
+            "religion",
+            "sect",
+            "caste",
+            "relation",
+            "relationship",
+            "status",
+            "childrenStatus",
+            "children_status",
+            "occupation",
+            "education",
+            "highestEducation",
+            "highest_education",
+            "value",
+            "slug",
+            "_id",
+            "id",
+        ])
+    );
+};
+
+const getOptions = (options) => {
+    return toOptionArray(options).filter((option) => getOptionValue(option));
+};
+
+const getFirstOptionValue = (options) => {
+    return getOptionValue(options[0]);
+};
+
+const getOptionGroupKeys = (options) => {
+    if (!options || Array.isArray(options) || typeof options !== "object") {
+        return [];
+    }
+
+    return Object.keys(options).filter((key) => getOptions(options[key]).length);
+};
 
 const ProfileCreate = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useUserLocation();
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-            profileType: relationToUserLabels[0],
-            fullName: "",
-            dob: "",
-            gender: "male",
-            height: "",
-            religion: "Islam",
-            sect: "Sunni",
-            cast: "Phatan",
-            address: "",
-            status: "divorced",
-            children: "yes",
-        },
+    const { data: allConstantData, isLoading } = useGetAllConstantDataQuery();
+    const defaultsWereSynced = useRef(false);
+    const navigate = useNavigate();
+    const [selectedSectGroup, setSelectedSectGroup] = useState("");
+    const { register, handleSubmit, reset, setValue, clearErrors, formState: { errors } } = useForm({
+        defaultValues: defaultFormValues,
     });
+
+    const {
+        religions = emptyOptions,
+        sects = emptyOptions,
+        castes = emptyOptions,
+        candidateCreatorRelations = emptyOptions,
+        relationshipStatuses = emptyOptions,
+        childrenStatuses = emptyOptions,
+        occupations = emptyOptions,
+        highestEducations = emptyOptions,
+        moveAbroadStatuses = emptyOptions,
+    } = allConstantData?.data || emptyConstantData;
+
+    const religionOptions = useMemo(() => getOptions(religions), [religions]);
+    const sectGroupOptions = useMemo(() => getOptionGroupKeys(sects), [sects]);
+    const activeSectGroup = selectedSectGroup || sectGroupOptions[0] || "";
+    const sectOptions = useMemo(() => {
+        if (activeSectGroup) {
+            return getOptions(sects?.[activeSectGroup]);
+        }
+
+        return getOptions(sects);
+    }, [activeSectGroup, sects]);
+    const casteOptions = useMemo(() => getOptions(castes), [castes]);
+    const candidateRelationOptions = useMemo(() => getOptions(candidateCreatorRelations), [candidateCreatorRelations]);
+    const relationshipStatusOptions = useMemo(() => getOptions(relationshipStatuses), [relationshipStatuses]);
+    const childrenStatusOptions = useMemo(() => getOptions(childrenStatuses), [childrenStatuses]);
+    const occupationOptions = useMemo(() => getOptions(occupations), [occupations]);
+    const highestEducationOptions = useMemo(() => getOptions(highestEducations), [highestEducations]);
+    const moveAbroadOptions = useMemo(() => getOptions(moveAbroadStatuses), [moveAbroadStatuses]);
+
+    useEffect(() => {
+        const hasServerOptions = [
+            religionOptions,
+            sectOptions,
+            casteOptions,
+            candidateRelationOptions,
+            relationshipStatusOptions,
+            childrenStatusOptions,
+            occupationOptions,
+            highestEducationOptions,
+            moveAbroadOptions,
+        ].some((options) => options.length);
+
+        if (isLoading || defaultsWereSynced.current || !hasServerOptions) {
+            return;
+        }
+
+        reset({
+            ...defaultFormValues,
+            religion: getFirstOptionValue(religionOptions),
+            sect: getFirstOptionValue(sectOptions),
+            cast: getFirstOptionValue(casteOptions),
+            profileType: getFirstOptionValue(candidateRelationOptions),
+            status: getFirstOptionValue(relationshipStatusOptions),
+            children: getFirstOptionValue(childrenStatusOptions),
+            occupation: getFirstOptionValue(occupationOptions),
+            highestEducation: getFirstOptionValue(highestEducationOptions),
+            moveAbroad: getFirstOptionValue(moveAbroadOptions),
+        });
+        defaultsWereSynced.current = true;
+    }, [
+        candidateRelationOptions,
+        casteOptions,
+        childrenStatusOptions,
+        highestEducationOptions,
+        isLoading,
+        moveAbroadOptions,
+        occupationOptions,
+        relationshipStatusOptions,
+        religionOptions,
+        reset,
+        activeSectGroup,
+        sectOptions,
+    ]);
+
+    if (isLoading) {
+        return <ProfileFormSkeleton />
+    }
 
     const inputStyle = "w-full px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-pink-200 focus:border-maroon-600 outline-none appearance-none bg-white text-gray-700";
     const labelStyle = "block text-xl text-[#262626] font-semibold mb-2 ml-1";
@@ -40,13 +244,52 @@ const ProfileCreate = () => {
         "aria-describedby": errors[fieldName] ? `${fieldName}-error` : undefined,
     });
     const requiredField = (message) => ({ required: message });
-    
+    const sectField = register("sect", requiredField("Please select your sect."));
+    const renderOptions = (options) => {
+        if (!options.length) {
+            return <option value="">No options found</option>;
+        }
+
+        return options.map((option, index) => {
+            const value = getOptionValue(option);
+
+            return (
+                <option key={`${value}-${index}`} value={value}>
+                    {getOptionLabel(option)}
+                </option>
+            );
+        });
+    };
+    const renderSectGroupOptions = (options) => {
+        if (!options.length) {
+            return <option value="">No options found</option>;
+        }
+
+        return options.map((option) => (
+            <option key={option} value={option}>
+                {option}
+            </option>
+        ));
+    };
+    const handleSectGroupChange = (event) => {
+        const nextSectGroup = event.target.value;
+        const nextSectOptions = getOptions(sects?.[nextSectGroup]);
+        const nextSectValue = getFirstOptionValue(nextSectOptions);
+
+        setSelectedSectGroup(nextSectGroup);
+        setValue("sect", nextSectValue, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+
+        if (nextSectValue) {
+            clearErrors("sect");
+        }
+    };
+
     const onSubmit = (data) => {
         const userInfo = {
             name: data?.fullName,
             dateOfBirth: data?.dob,
             gender: data?.gender,
-            height: data?.height,
+            height: Number(data?.height),
             religion: data?.religion,
             sect: data?.sect,
             caste: data?.cast,
@@ -54,6 +297,9 @@ const ProfileCreate = () => {
             relationship_status: data?.status,
             have_children: data?.children,
             relationToUser: data?.profileType,
+            occupation: data?.occupation,
+            highest_education: (data?.highestEducation),
+            move_abroad: data?.moveAbroad,
             coordinates: [
                 location?.longitude,
                 location?.latitude,
@@ -101,8 +347,8 @@ const ProfileCreate = () => {
                                         {...register("gender", requiredField("Please select your gender."))}
                                         {...errorProps("gender")}
                                         className={getInputStyle("gender")}>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
                                     </select>
                                     <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                     {renderError("gender")}
@@ -110,6 +356,7 @@ const ProfileCreate = () => {
                                 <div>
                                     <label className={labelStyle}>Height</label>
                                     <input
+                                        type="number"
                                         {...register("height", requiredField("Please enter your height."))}
                                         {...errorProps("height")}
                                         placeholder="4'0'' (122 cm)"
@@ -122,26 +369,41 @@ const ProfileCreate = () => {
                                         {...register("religion", requiredField("Please select your religion."))}
                                         {...errorProps("religion")}
                                         className={getInputStyle("religion")}>
-                                        <option value="Islam">Islam</option>
-                                        <option value="Hindu">Hindu</option>
-                                        <option value="Others">Others</option>
+                                        {renderOptions(religionOptions)}
                                     </select>
                                     <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                     {renderError("religion")}
                                 </div>
-                                <div className="relative">
-                                    <label className={labelStyle}>Select your Sect</label>
-                                    <select
-                                        {...register("sect", requiredField("Please select your sect."))}
-                                        {...errorProps("sect")}
-                                        className={getInputStyle("sect")}>
-                                        <option value="Sunni">Sunni</option>
-                                        <option value="Siya">Siya</option>
-                                        <option value="Ahmadiyya">Ahmadiyya</option>
-                                        <option value="Others">Others</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
-                                    {renderError("sect")}
+                                <div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="relative">
+                                            <label className={labelStyle}>Select your Sect</label>
+                                            <select
+                                                value={activeSectGroup}
+                                                onChange={handleSectGroupChange}
+                                                className={inputStyle}>
+                                                {renderSectGroupOptions(sectGroupOptions)}
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
+                                        </div>
+                                        <div className="relative">
+                                            <label className={labelStyle}>Sect Type</label>
+                                            <select
+                                                {...sectField}
+                                                onChange={(event) => {
+                                                    sectField.onChange(event);
+                                                    if (event.target.value) {
+                                                        clearErrors("sect");
+                                                    }
+                                                }}
+                                                {...errorProps("sect")}
+                                                className={getInputStyle("sect")}>
+                                                {renderOptions(sectOptions)}
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
+                                            {renderError("sect")}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="relative">
                                     <label className={labelStyle}>Select your Cast</label>
@@ -149,8 +411,7 @@ const ProfileCreate = () => {
                                         {...register("cast", requiredField("Please select your cast."))}
                                         {...errorProps("cast")}
                                         className={getInputStyle("cast")}>
-                                        <option value="Phatan">Phatan</option>
-                                        <option value="Others">Others</option>
+                                        {renderOptions(casteOptions)}
                                     </select>
                                     <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                     {renderError("cast")}
@@ -171,7 +432,7 @@ const ProfileCreate = () => {
                             </div>
                         </section>
 
-                        <section className="mt-12">
+                        <section className="mt-6">
                             <h2 className="text-xl font-bold text-red-900 mb-6">Relationship and Family Details</h2>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="relative">
@@ -180,33 +441,72 @@ const ProfileCreate = () => {
                                         {...register("profileType", requiredField("Please select your relationship with candidate."))}
                                         {...errorProps("profileType")}
                                         className={getInputStyle("profileType")}>
-                                        {relationToUserLabels.map((relation) => (
-                                            <option key={relation} value={relation}>
-                                                {relation}
-                                            </option>
-                                        ))}
+                                        {renderOptions(candidateRelationOptions)}
                                     </select>
                                     <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                     {renderError("profileType")}
                                 </div>
                                 <div className="relative">
                                     <label className={labelStyle}>What is your relationship status?</label>
-                                    <select {...register("status", requiredField("Please select your relationship status."))} {...errorProps("status")} className={getInputStyle("status")}>
-                                        <option value="divorced">Divorced</option>
-                                        <option value="single">Single</option>
-                                        <option value="widowed">Widowed</option>
+                                    <select
+                                        {...register("status", requiredField("Please select your relationship status."))}
+                                        {...errorProps("status")}
+                                        className={getInputStyle("status")}>
+                                        {renderOptions(relationshipStatusOptions)}
                                     </select>
                                     <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                     {renderError("status")}
                                 </div>
                                 <div className="relative">
                                     <label className={labelStyle}>Do you have children?</label>
-                                    <select {...register("children", requiredField("Please select children status."))} {...errorProps("children")} className={getInputStyle("children")}>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
+                                    <select
+                                        {...register("children", requiredField("Please select children status."))}
+                                        {...errorProps("children")}
+                                        className={getInputStyle("children")}>
+                                        {renderOptions(childrenStatusOptions)}
                                     </select>
                                     <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
                                     {renderError("children")}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="relative mt-6">
+                            <img src={loveIcon} className="pointer-events-none absolute left-1/2 top-10 hidden h-11 w-11 -translate-x-1/2 opacity-50 md:block" />
+                            <h2 className="text-xl font-bold text-red-900 mb-6">Career and Education</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="relative">
+                                    <label className={labelStyle}>What is your occupation?</label>
+                                    <select
+                                        {...register("occupation", requiredField("Please select your occupation."))}
+                                        {...errorProps("occupation")}
+                                        className={getInputStyle("occupation")}>
+                                        {renderOptions(occupationOptions)}
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
+                                    {renderError("occupation")}
+                                </div>
+                                <div className="relative">
+                                    <label className={labelStyle}>What is your highest level of education?</label>
+                                    <select
+                                        {...register("highestEducation", requiredField("Please select your highest level of education."))}
+                                        {...errorProps("highestEducation")}
+                                        className={getInputStyle("highestEducation")}>
+                                        {renderOptions(highestEducationOptions)}
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
+                                    {renderError("highestEducation")}
+                                </div>
+                                <div className="relative">
+                                    <label className={labelStyle}>Open to moving abroad for marriage?</label>
+                                    <select
+                                        {...register("moveAbroad", requiredField("Please select your moving abroad preference."))}
+                                        {...errorProps("moveAbroad")}
+                                        className={getInputStyle("moveAbroad")}>
+                                        {renderOptions(moveAbroadOptions)}
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-11 text-gray-400 pointer-events-none" size={20} />
+                                    {renderError("moveAbroad")}
                                 </div>
                             </div>
                         </section>

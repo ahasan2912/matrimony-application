@@ -1,12 +1,24 @@
-import React, { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 
-const ImageUploaded = () => {
+const ImageUploaded = ({ setImageFiles }) => {
     const [images, setImages] = useState([]);
     const [dragIndex, setDragIndex] = useState(null);
     const fileInputRef = useRef(null);
+    const imagesRef = useRef([]);
 
     const MAX_PHOTOS = 6;
+
+    useEffect(() => {
+        imagesRef.current = images;
+        setImageFiles?.(images);
+    }, [images, setImageFiles]);
+
+    useEffect(() => {
+        return () => {
+            imagesRef.current.forEach((img) => URL.revokeObjectURL(img.url));
+        };
+    }, []);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -24,7 +36,15 @@ const ImageUploaded = () => {
     };
 
     const removeImage = (id) => {
-        setImages((prev) => prev.filter((img) => img.id !== id));
+        setImages((prev) => {
+            const imageToRemove = prev.find((img) => img.id === id);
+
+            if (imageToRemove) {
+                URL.revokeObjectURL(imageToRemove.url);
+            }
+
+            return prev.filter((img) => img.id !== id);
+        });
     };
 
     const triggerUpload = () => {
@@ -45,9 +65,6 @@ const ImageUploaded = () => {
         setImages(updatedImages);
         setDragIndex(null);
     };
-
-    console.log(images);
-
     return (
         <div className="">
             <div className="flex justify-between items-end mb-4" >
@@ -82,6 +99,7 @@ const ImageUploaded = () => {
                             </div>
                         )}
                         <button
+                            type="button"
                             onClick={() => removeImage(img.id)}
                             className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                             <X size={14} />
@@ -90,6 +108,7 @@ const ImageUploaded = () => {
                 ))}
                 {Array.from({ length: MAX_PHOTOS - images.length }).map((_, i) => (
                     <button
+                        type="button"
                         key={`empty-${i}`}
                         onClick={triggerUpload}
                         className="flex flex-col items-center justify-center aspect-4/5 border-2 border-dashed border-gray-300 rounded-xl hover:border-rose-300 hover:bg-rose-50 transition-colors group">

@@ -135,10 +135,12 @@ const Navbar = () => {
                             <img src={images.queenIcon} alt="queenIcon" />
                             <span>Upgrade</span>
                         </button>
-                        <div className="flex justify-around pt-2 text-[#8E1B3E]">
-                            <span>🔔 Notification</span>
-                            <span>👤 Profile</span>
-                        </div>
+                        {
+                            user && token && <div className="flex justify-around pt-2 text-[#8E1B3E]">
+                                <span>🔔 Notification</span>
+                                <span onClick={handleClickProfile}>👤 Profile</span>
+                            </div>
+                        }
                     </div>
                 </div>
             )}
