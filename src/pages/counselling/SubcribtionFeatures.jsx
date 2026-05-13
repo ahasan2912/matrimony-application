@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { images } from "../../../public/image";
 import { CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom";
 const SubcribtionFeatures = () => {
     const [selectedPlan, setSelectedPlan] = useState('Gold');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, []);
+
     const handleSubmitPlan = () => {
         navigate("/marriageCounselling")
     }
@@ -89,7 +94,7 @@ const SubcribtionFeatures = () => {
                         className={`bg-blue-100 rounded-xl p-6 relative cursor-pointer transition-transform hover:scale-105 border-2 ${selectedPlan === "Platinum" ? "border-gray-400" : "border-transparent"
                             }`}
                     >
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#7DD3FC] to-[#0EA5E9] text-white px-4 py-1 rounded-lg font-bold shadow-md">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-linear-to-r from-[#7DD3FC] to-[#0EA5E9] text-white px-4 py-1 rounded-lg font-bold shadow-md">
                             $29.99 p/m
                         </div>
 

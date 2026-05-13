@@ -3,11 +3,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import HeadingTitle from "../../components/home/HeadingTitle";
 import loveIcon from '../../../public/images/svg/loveIcon.svg';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userInformation } from "../../features/user/userSlice";
 import useUserLocation from "../../hooks/useUserLocation";
 import { useGetAllConstantDataQuery } from "../../features/constantdata/constantApi";
-import ProfileFormSkeleton from "../../components/loading-skeleton/ProfileFormSkeleton";
+import ProfileFormSkeleton from "../../components/loading- skeletons/ProfileFormSkeleton";
 import { useNavigate } from "react-router-dom";
 
 const emptyOptions = [];
@@ -17,7 +17,7 @@ const defaultFormValues = {
     profileType: "",
     fullName: "",
     dob: "",
-    gender: "male",
+    gender: "MALE",
     height: "",
     religion: "",
     sect: "",
@@ -142,6 +142,57 @@ const getOptionGroupKeys = (options) => {
     return Object.keys(options).filter((key) => getOptions(options[key]).length);
 };
 
+const hasUserInfoData = (userInfo) => {
+    return userInfo && typeof userInfo === "object" && Object.keys(userInfo).length > 0;
+};
+
+const toDateInputValue = (value) => {
+    if (!value) {
+        return "";
+    }
+
+    return String(value).split("T")[0];
+};
+
+const getGenderValue = (value) => {
+    if (!value) {
+        return "";
+    }
+
+    const gender = String(value).toUpperCase();
+    return gender === "MALE" || gender === "FEMALE" ? gender : value;
+};
+
+const getFormValuesFromUserInfo = (userInfo, fallbackValues) => {
+    return {
+        ...fallbackValues,
+        profileType: userInfo?.relationToUser ?? fallbackValues.profileType,
+        fullName: userInfo?.name ?? fallbackValues.fullName,
+        dob: toDateInputValue(userInfo?.dateOfBirth) || fallbackValues.dob,
+        gender: getGenderValue(userInfo?.gender) || fallbackValues.gender,
+        height: userInfo?.height ?? fallbackValues.height,
+        religion: userInfo?.religion ?? fallbackValues.religion,
+        sect: userInfo?.sect ?? fallbackValues.sect,
+        cast: userInfo?.caste ?? fallbackValues.cast,
+        address: userInfo?.address ?? fallbackValues.address,
+        status: userInfo?.relationship_status ?? fallbackValues.status,
+        children: userInfo?.have_children ?? fallbackValues.children,
+        occupation: userInfo?.occupation ?? fallbackValues.occupation,
+        highestEducation: userInfo?.highest_education ?? fallbackValues.highestEducation,
+        moveAbroad: userInfo?.move_abroad ?? fallbackValues.moveAbroad,
+    };
+};
+
+const getSectGroupByValue = (sects, sectValue) => {
+    if (!sectValue || !sects || Array.isArray(sects) || typeof sects !== "object") {
+        return "";
+    }
+
+    return Object.keys(sects).find((key) => (
+        getOptions(sects[key]).some((option) => getOptionValue(option) === sectValue)
+    )) || "";
+};
+
 const ProfileCreate = () => {
     const dispatch = useDispatch();
     const location = useUserLocation();
@@ -149,9 +200,11 @@ const ProfileCreate = () => {
     const defaultsWereSynced = useRef(false);
     const navigate = useNavigate();
     const [selectedSectGroup, setSelectedSectGroup] = useState("");
+    const { userInfo } = useSelector((state) => state?.user);
     const { register, handleSubmit, reset, setValue, clearErrors, formState: { errors } } = useForm({
         defaultValues: defaultFormValues,
     });
+    const hasSavedUserInfo = hasUserInfoData(userInfo);
 
     const {
         religions = emptyOptions,
@@ -167,7 +220,10 @@ const ProfileCreate = () => {
 
     const religionOptions = useMemo(() => getOptions(religions), [religions]);
     const sectGroupOptions = useMemo(() => getOptionGroupKeys(sects), [sects]);
-    const activeSectGroup = selectedSectGroup || sectGroupOptions[0] || "";
+    const savedSectGroup = useMemo(() => (
+        hasSavedUserInfo ? getSectGroupByValue(sects, userInfo?.sect) : ""
+    ), [hasSavedUserInfo, sects, userInfo?.sect]);
+    const activeSectGroup = selectedSectGroup || savedSectGroup || sectGroupOptions[0] || "";
     const sectOptions = useMemo(() => {
         if (activeSectGroup) {
             return getOptions(sects?.[activeSectGroup]);
@@ -196,11 +252,11 @@ const ProfileCreate = () => {
             moveAbroadOptions,
         ].some((options) => options.length);
 
-        if (isLoading || defaultsWereSynced.current || !hasServerOptions) {
+        if (isLoading || defaultsWereSynced.current || (!hasServerOptions && !hasSavedUserInfo)) {
             return;
         }
 
-        reset({
+        const nextFormValues = {
             ...defaultFormValues,
             religion: getFirstOptionValue(religionOptions),
             sect: getFirstOptionValue(sectOptions),
@@ -211,7 +267,10 @@ const ProfileCreate = () => {
             occupation: getFirstOptionValue(occupationOptions),
             highestEducation: getFirstOptionValue(highestEducationOptions),
             moveAbroad: getFirstOptionValue(moveAbroadOptions),
-        });
+        };
+        const savedFormValues = hasSavedUserInfo ? getFormValuesFromUserInfo(userInfo, nextFormValues) : nextFormValues;
+
+        reset(savedFormValues);
         defaultsWereSynced.current = true;
     }, [
         candidateRelationOptions,
@@ -226,6 +285,8 @@ const ProfileCreate = () => {
         reset,
         activeSectGroup,
         sectOptions,
+        hasSavedUserInfo,
+        userInfo,
     ]);
 
     if (isLoading) {
@@ -359,7 +420,7 @@ const ProfileCreate = () => {
                                         type="number"
                                         {...register("height", requiredField("Please enter your height."))}
                                         {...errorProps("height")}
-                                        placeholder="4'0'' (122 cm)"
+                                        placeholder="Enter height in cm"
                                         className={getInputStyle("height")} />
                                     {renderError("height")}
                                 </div>

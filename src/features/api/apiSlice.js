@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithErrorHandling } from "./generatenewToken";
 
 export const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
@@ -15,8 +16,8 @@ export const baseQuery = fetchBaseQuery({
 
 const apiSlice = createApi({
     reducerPath: "api",
-    // baseQuery: baseQueryWithErrorHandling,
-    baseQuery: baseQuery,
+    baseQuery: baseQueryWithErrorHandling,
+    // baseQuery: baseQuery,
     tagTypes: ["candidates"],
     endpoints: () => ({}),
 });

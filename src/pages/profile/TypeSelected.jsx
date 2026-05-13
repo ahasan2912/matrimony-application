@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import loveIcon from '../../../public/images/svg/loveIcon.svg';
 import HeadingTitle from '../../components/home/HeadingTitle';
-import ProfileFormSkeleton from '../../components/loading-skeleton/ProfileFormSkeleton';
+import ProfileFormSkeleton from '../../components/loading- skeletons/ProfileFormSkeleton';
 import { useGetAllConstantDataQuery } from '../../features/constantdata/constantApi';
 import { userInformation } from '../../features/user/userSlice';
 
@@ -94,15 +94,48 @@ const getCategoryOptions = (category) => {
     return getOptions(category.options ?? category.items ?? category.interests);
 };
 
+const hasUserInfoData = (userInfo) => {
+    return userInfo && typeof userInfo === 'object' && Object.keys(userInfo).length > 0;
+};
+
+const getSavedSelectValue = (value) => {
+    if (value === null || value === undefined) {
+        return '';
+    }
+
+    return String(value);
+};
+
+const getSavedSelectedValues = (values) => {
+    if (Array.isArray(values)) {
+        return values.filter(Boolean).map(String);
+    }
+
+    if (values) {
+        return [String(values)];
+    }
+
+    return [];
+};
+
 const TypeSelected = () => {
-    const [selected, setSelected] = useState([]);
-    const [prsnlInrstSelected, setPrsnlInrstSelected] = useState([]);
-    const [smoking, setSmoking] = useState('');
-    const [alcohol, setAlcohol] = useState('');
+    const { userInfo } = useSelector((state) => state?.user);
+    const hasSavedUserInfo = hasUserInfoData(userInfo);
+    const [selected, setSelected] = useState(() => (
+        hasSavedUserInfo ? getSavedSelectedValues(userInfo?.interests) : []
+    ));
+    const [prsnlInrstSelected, setPrsnlInrstSelected] = useState(() => (
+        hasSavedUserInfo ? getSavedSelectedValues(userInfo?.personality) : []
+    ));
+    const [smoking, setSmoking] = useState(() => (
+        hasSavedUserInfo ? getSavedSelectValue(userInfo?.smoke_status) : ''
+    ));
+    const [alcohol, setAlcohol] = useState(() => (
+        hasSavedUserInfo ? getSavedSelectValue(userInfo?.drink_status) : ''
+    ));
     const [validationErrors, setValidationErrors] = useState({});
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const userInfo = useSelector((state) => state?.user?.userInfo);
     const { data: allConstantData, isLoading } = useGetAllConstantDataQuery();
 
     const {

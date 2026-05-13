@@ -2,19 +2,24 @@ import { useCallback, useEffect, useState } from 'react';
 import loveIcon from '../../../public/images/svg/loveIcon.svg';
 import HeadingTitle from '../../components/home/HeadingTitle';
 import ImageUploaded from '../../components/ImageUploaded';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useCreateCandidateDataMutation } from '../../features/candidates/candidates';
+import { userInfoRemove } from '../../features/user/userSlice';
+import { persistor } from '../../app/store';
 
 const ProfileUpload = () => {
-    const [bioText, setBioText] = useState("");
-    const [imageFiles, setImageFiles] = useState([]);
-    const [errors, setErrors] = useState({});
     const userInfo = useSelector((state) => state?.user?.userInfo);
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const maxLength = 250;
     const minBioLength = 20;
+    const [bioText, setBioText] = useState(() => (
+        userInfo?.bio ? String(userInfo.bio).slice(0, maxLength) : ""
+    ));
+    const [imageFiles, setImageFiles] = useState([]);
+    const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
     const [createCandidateData, { isLoading, error, isSuccess }] = useCreateCandidateDataMutation();
 
     useEffect(() => {
@@ -82,6 +87,12 @@ const ProfileUpload = () => {
             formData.append("files", image.file ?? image);
         });
         await createCandidateData(formData);
+
+        // remove userinfo local storage
+        dispatch(userInfoRemove());
+        await persistor.flush();
+        await persistor.purge();
+
     }
 
     return (
@@ -93,10 +104,10 @@ const ProfileUpload = () => {
                 {/* ideal partner */}
                 <div className="max-w-5xl mx-auto">
                     <div className='mt-12'>
-                        <div className="mb-6">
+                        {/* <div className="mb-6">
                             <h2 className="text-2xl font-bold text-[#58001C] mb-3">Share more about you</h2>
                             <p className="text-[#737373] text-base leading-relaxed mb-6">Tell us about yourself and upload your best photos to help others get to know you better!</p>
-                        </div>
+                        </div> */}
                         <ImageUploaded setImageFiles={handleImageFilesChange} />
                         {errors.images && (
                             <p className="mt-2 text-sm font-medium text-[#B30042]">{errors.images}</p>
