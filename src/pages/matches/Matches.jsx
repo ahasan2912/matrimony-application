@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     ChevronLeft,
     ChevronRight,
@@ -11,7 +11,7 @@ import {
     Moon,
     Percent,
     RotateCcw,
-    Split,
+    Star,
     UserRound,
     X,
 } from 'lucide-react';
@@ -20,9 +20,31 @@ import { images } from '../../data/data';
 import { images as Icon } from '../../../public/image';
 import { useGetMyCandidateDataQuery } from '../../features/candidates/candidates';
 import ProfileDetailsSkeleton from '../../components/loading- skeletons/ProfileDetailsSkeleton';
-import { useGetSwipFeedDataQuery } from '../../features/swipfeed/swipfeedApi';
+import { useGetSwipFeedDataQuery, useHandleClickCandidateReactionMutation } from '../../features/swipfeed/swipfeedApi';
+import Conversation from './components/Conversation';
 
 const EMPTY_CARDS = [];
+const CURSOR_STORAGE_KEY = 'cursor';
+
+const getStoredCursor = () => {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+
+    return localStorage.getItem(CURSOR_STORAGE_KEY);
+};
+
+const saveStoredCursor = (value) => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    if (value) {
+        localStorage.setItem(CURSOR_STORAGE_KEY, value);
+    } else {
+        localStorage.removeItem(CURSOR_STORAGE_KEY);
+    }
+};
 
 const normalizeArray = (value) => {
     if (Array.isArray(value)) {
@@ -65,6 +87,15 @@ const getLabeledItems = (labeledItems, rawItems) => {
     return normalizeArray(rawItems).map(formatLabel).filter(Boolean);
 };
 
+const getTargetCandidateId = (card) => (
+    card?.targetCandidateId
+    || card?.candidateId
+    || card?.candidate?._id
+    || card?.candidate?.id
+    || card?._id
+    || card?.id
+);
+
 const DetailTitle = ({ children }) => (
     <h3 className="text-[22px] font-semibold text-[#9e133f]">
         {children}
@@ -88,19 +119,84 @@ const InfoRow = ({ children, icon: RowIcon, active = false }) => (
 );
 
 const Matches = () => {
+    const [cursor, setCursor] = useState(() => getStoredCursor());
+    const [feedState, setFeedState] = useState({ pages: [], currentPageIndex: 0 });
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
+    const [isConversation, setConversation] = useState(false);
     const { data: candidateData, isLoading } = useGetMyCandidateDataQuery();
     const candidateId = candidateData?.data?.candidate?._id;
-    const { data: matchingCandidate, isLoading: matchingCandidateLoading } = useGetSwipFeedDataQuery(candidateId, {
-        skip: !candidateId,
+    const limit = 2;
+    const {
+        currentData: matchingCandidate,
+        isLoading: matchingCandidateLoading,
+        isFetching: matchingCandidateFetching,
+    } = useGetSwipFeedDataQuery({ candidateId, cursor, limit }, {
+        skip: !candidateId
     });
-    const cards = matchingCandidate?.data?.cards ?? EMPTY_CARDS;
+    const [handleClickCandidateReaction] = useHandleClickCandidateReactionMutation();
+
+    useEffect(() => {
+        if (!candidateId) {
+            return;
+        }
+
+        const storedCursor = getStoredCursor();
+
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setCursor(storedCursor);
+        setFeedState({ pages: [], currentPageIndex: 0 });
+        setCurrentCardIndex(0);
+        setCurrentImageIndex(0);
+    }, [candidateId]);
+
+    useEffect(() => {
+        const pageData = matchingCandidate?.data;
+
+        if (!pageData) {
+            return;
+        }
+
+        const pageCursor = cursor ?? null;
+        const newPage = {
+            cursor: pageCursor,
+            cards: pageData.cards ?? EMPTY_CARDS,
+            nextCursor: pageData.nextCursor ?? null,
+        };
+
+        if (!pageCursor && pageData.nextCursor && !getStoredCursor()) {
+            saveStoredCursor(pageData.nextCursor);
+        }
+
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setFeedState((prevState) => {
+            const existingPageIndex = prevState.pages.findIndex((page) => page.cursor === pageCursor);
+
+            if (existingPageIndex !== -1) {
+                const nextPages = [...prevState.pages];
+                nextPages[existingPageIndex] = newPage;
+                return {
+                    pages: nextPages,
+                    currentPageIndex: existingPageIndex,
+                };
+            }
+
+            return {
+                pages: [...prevState.pages, newPage],
+                currentPageIndex: prevState.pages.length,
+            };
+        });
+        setCurrentCardIndex(0);
+        setCurrentImageIndex(0);
+    }, [matchingCandidate, cursor]);
 
     if (isLoading || matchingCandidateLoading) {
         return <ProfileDetailsSkeleton />
     }
 
+    const { pages: feedPages, currentPageIndex } = feedState;
+    const currentPage = feedPages[currentPageIndex];
+    const cards = currentPage?.cards ?? EMPTY_CARDS;
     if (!candidateId) {
         return (
             <div className="max-w-7xl mx-auto bg-white rounded-[20px] my-12.5 px-4 py-12 text-center">
@@ -112,15 +208,15 @@ const Matches = () => {
 
     if (!cards.length) {
         return (
-            <div className="max-w-7xl mx-auto bg-white rounded-[20px] my-12.5 px-4 py-12 text-center">
+            <div className="max-w-7xl mx-auto bg-white rounded-[20px] my-12.5 px-4 py-12 text-center flex flex-col items-center justify-center min-h-[calc(100vh-510px)]">
                 <h2 className="text-2xl font-semibold text-[#58001C]">No matches found</h2>
                 <p className="text-[#737373] mt-2">Your matching feed is empty right now.</p>
             </div>
         );
     }
-
     const safeCardIndex = Math.min(currentCardIndex, cards.length - 1);
     const currentCard = cards[safeCardIndex];
+    const targetCandidateId = getTargetCandidateId(currentCard);
     const candidateImages = normalizeArray(currentCard?.images);
     const profileImages = candidateImages.length ? candidateImages : images;
     const safeImageIndex = Math.min(currentImageIndex, profileImages.length - 1);
@@ -136,8 +232,10 @@ const Matches = () => {
     const isProfileVerified = Boolean(
         currentCard?.isVerified || currentCard?.verified || currentCard?.verificationStatus
     );
-    const hasNextCard = safeCardIndex < cards.length - 1;
-    const hasPreviousCard = safeCardIndex > 0;
+    const hasLoadedNextPage = currentPageIndex < feedPages.length - 1;
+    const hasNextCursor = Boolean(currentPage?.nextCursor);
+    const hasNextCard = safeCardIndex < cards.length - 1 || hasLoadedNextPage || hasNextCursor;
+    const hasPreviousCard = safeCardIndex > 0 || currentPageIndex > 0;
     const profileHighlights = [
         age ? `${age} years old` : '',
         gender,
@@ -171,12 +269,33 @@ const Matches = () => {
     };
 
     const showNextCandidate = () => {
-        if (!hasNextCard) {
+        if (!hasNextCard || matchingCandidateFetching) {
             return;
         }
 
-        setCurrentCardIndex(safeCardIndex + 1);
-        setCurrentImageIndex(0);
+        if (safeCardIndex < cards.length - 1) {
+            setCurrentCardIndex(safeCardIndex + 1);
+            setCurrentImageIndex(0);
+            return;
+        }
+
+        if (hasLoadedNextPage) {
+            const nextLoadedPage = feedPages[currentPageIndex + 1];
+
+            saveStoredCursor(nextLoadedPage?.cursor ?? null);
+            setFeedState((prevState) => ({
+                ...prevState,
+                currentPageIndex: currentPageIndex + 1,
+            }));
+            setCurrentCardIndex(0);
+            setCurrentImageIndex(0);
+            return;
+        }
+
+        if (currentPage?.nextCursor) {
+            saveStoredCursor(currentPage.nextCursor);
+            setCursor(getStoredCursor());
+        }
     };
 
     const showPreviousCandidate = () => {
@@ -184,15 +303,51 @@ const Matches = () => {
             return;
         }
 
-        setCurrentCardIndex(safeCardIndex - 1);
+        if (safeCardIndex > 0) {
+            setCurrentCardIndex(safeCardIndex - 1);
+            setCurrentImageIndex(0);
+            return;
+        }
+
+        const previousPageIndex = currentPageIndex - 1;
+        const previousPageCards = feedPages[previousPageIndex]?.cards ?? EMPTY_CARDS;
+        const previousPageCursor = feedPages[previousPageIndex]?.cursor ?? null;
+
+        saveStoredCursor(previousPageCursor);
+        setFeedState((prevState) => ({
+            ...prevState,
+            currentPageIndex: previousPageIndex,
+        }));
+        setCurrentCardIndex(Math.max(previousPageCards.length - 1, 0));
         setCurrentImageIndex(0);
     };
 
+    const handleCandidateReaction = (reaction) => {
+        if (reaction === 'SUPER_LIKE') {
+            handleClickCandidateReaction({
+                "candidateId": candidateId,
+                "targetCandidateId": targetCandidateId,
+                "type": reaction,
+                "source": "FEED"
+            });
+        } else if (reaction === 'LIKE') {
+            handleClickCandidateReaction({
+                "candidateId": candidateId,
+                "targetCandidateId": targetCandidateId,
+                "type": reaction,
+                "source": "FEED"
+            });
+        }
+    }
+
+    const handleConversation = () => {
+        setConversation(true);
+    }
     return (
         <div className="max-w-7xl mx-auto my-12.5 px-4">
             <div className="overflow-hidden rounded-2xl border border-[#F1DDE4] bg-white shadow-[0_18px_55px_rgba(88,0,28,0.08)] flex flex-col lg:flex-row text-gray-800">
                 <div className="relative lg:w-[48%] bg-[#111111]">
-                    <div className="relative group h-155 max-h-[82vh] min-h-135 lg:h-165 lg:max-h-none lg:min-h-0 overflow-hidden">
+                    <div className="relative group h-155 max-h-[82vh] min-h-135 lg:h-172 lg:max-h-none lg:min-h-0 overflow-hidden">
                         <img
                             src={currentImage}
                             alt={name}
@@ -273,28 +428,51 @@ const Matches = () => {
                                 onClick={showPreviousCandidate}
                                 disabled={!hasPreviousCard}
                                 aria-label="Show previous candidate"
-                                className={`size-12 rounded-xl bg-white/8 text-white flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors ${hasPreviousCard ? 'cursor-pointer hover:bg-white/18' : 'cursor-not-allowed opacity-45'}`}
+                                className={`size-12 rounded-lg bg-white/8 text-white flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors ${hasPreviousCard ? 'cursor-pointer hover:bg-white/18' : 'cursor-not-allowed opacity-45'}`}
                             >
                                 <RotateCcw size={25} />
                             </button>
                             <button
                                 type="button"
                                 onClick={showNextCandidate}
-                                disabled={!hasNextCard}
+                                disabled={!hasNextCard || matchingCandidateFetching}
                                 aria-label="Show next candidate"
-                                className={`size-14 rounded-xl bg-white/10 text-[#FF3D73] flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors ${hasNextCard ? 'cursor-pointer hover:bg-white/20' : 'cursor-not-allowed opacity-45'}`}
+                                className={`size-14 rounded-lg bg-white/10 text-[#FF3D73] flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors ${hasNextCard && !matchingCandidateFetching ? 'cursor-pointer hover:bg-white/20' : 'cursor-not-allowed opacity-45'}`}
                             >
                                 <X size={31} strokeWidth={3} />
                             </button>
-                            <button type="button" className="size-12 rounded-xl cursor-pointer bg-white/8 text-white flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors hover:bg-white/18">
-                                <MessageCircle size={25} />
-                            </button>
-                            <button type="button" className="size-14 rounded-xl cursor-pointer bg-[#C2004D] text-white flex items-center justify-center shadow-[0_14px_32px_rgba(194,0,77,0.3)] transition-colors hover:bg-[#A90043]">
+                            <button
+                                type="button"
+                                onClick={() => handleCandidateReaction('LIKE')}
+                                disabled={!targetCandidateId}
+                                aria-label={`Like ${name}`}
+                                className={`size-14 rounded-lg bg-[#C2004D] text-white flex items-center justify-center shadow-[0_14px_32px_rgba(194,0,77,0.3)] transition-colors hover:bg-[#A90043] ${targetCandidateId ? 'cursor-pointer' : 'cursor-not-allowed opacity-45'}`}
+                            >
                                 <Heart size={31} fill="currentColor" />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleCandidateReaction('SUPER_LIKE')}
+                                disabled={!targetCandidateId}
+                                aria-label={`Super like ${name}`}
+                                className={`size-12 rounded-lg bg-[#289ac7] text-white flex items-center justify-center shadow-[0_14px_32px_rgba(40,154,199,0.3)] transition-colors hover:bg-[#4eb5dd] ${targetCandidateId ? 'cursor-pointer' : 'cursor-not-allowed opacity-45'}`}
+                            >
+                                <Star size={25} fill="currentColor" />
+                            </button>
+                            <button onClick={handleConversation} type="button" className="size-12 rounded-lg cursor-pointer bg-white/8 text-white flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors hover:bg-white/18">
+                                <MessageCircle size={25} />
                             </button>
                         </div>
                     </div>
                 </div>
+
+                {isConversation && (
+                    <Conversation
+                        candidate={currentCard}
+                        image={currentImage}
+                        onClose={() => setConversation(false)}
+                    />
+                )}
 
                 <div className="flex-1 px-6 py-6 lg:px-7 lg:py-7">
                     <div className="flex items-start justify-between gap-4">
@@ -355,9 +533,7 @@ const Matches = () => {
                             )}
                         </div>
                     </section>
-
                     <div className="my-6 h-px bg-[#E9DDE2]" />
-
                     <section>
                         <DetailTitle>Detailed Information</DetailTitle>
                         <div className="mt-3 flex flex-col gap-4 rounded-xl border border-[#F6A7C2] bg-[#FFEAF2] p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -374,9 +550,8 @@ const Matches = () => {
                             </div>
                             <Link
                                 to="/subcribtion"
-                                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-[#C2004D] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#A90043]"
-                            >
-                                Upgrade
+                                className="inline-flex h-9 shrink-0 items-center justify-center rounded-md bg-[#C2004D] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#A90043]"
+                            > Upgrade
                             </Link>
                         </div>
                     </section>

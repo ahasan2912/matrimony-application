@@ -6,9 +6,9 @@ import router from './routes/Route.jsx'
 import { RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { persistor, store } from './app/store.js'
-import { Toaster } from 'react-hot-toast'
 import GoogleTranslator from './components/shared/GoogleTranslator.jsx';
 import InitialPageLoader from './components/loading- skeletons/InitialPageLoader.jsx';
+import { Bounce, ToastContainer } from 'react-toastify';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,7 +16,19 @@ createRoot(document.getElementById('root')).render(
       <GoogleTranslator />
       <PersistGate loading={<InitialPageLoader />} persistor={persistor}>
         <RouterProvider router={router} />
-        <Toaster position="top-right" reverseOrder={false} />
+        <ToastContainer
+          position="top-right"
+          autoClose={500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
       </PersistGate>
     </Provider>
   </StrictMode>

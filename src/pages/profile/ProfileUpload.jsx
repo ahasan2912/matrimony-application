@@ -4,10 +4,10 @@ import HeadingTitle from '../../components/home/HeadingTitle';
 import ImageUploaded from '../../components/ImageUploaded';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import { useCreateCandidateDataMutation } from '../../features/candidates/candidates';
 import { userInfoRemove } from '../../features/user/userSlice';
 import { persistor } from '../../app/store';
+import { toast } from 'react-toastify';
 
 const ProfileUpload = () => {
     const userInfo = useSelector((state) => state?.user?.userInfo);

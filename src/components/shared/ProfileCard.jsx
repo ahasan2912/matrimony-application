@@ -1,11 +1,11 @@
-import { PencilLine, Settings, AlertTriangle, ChevronRight } from 'lucide-react';
+import { PencilLine, Settings, AlertTriangle, ChevronRight, Check } from 'lucide-react';
 import { images } from '../../../public/image';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLoggedOut } from '../../features/auth/authSlice';
 import Cookies from "js-cookie";
-import toast from 'react-hot-toast';
 import { persistor } from '../../app/store';
+import { toast } from 'react-toastify';
 
 const ProfileCard = ({ menuRef }) => {
     const dispatch = useDispatch();
@@ -20,7 +20,11 @@ const ProfileCard = ({ menuRef }) => {
             sameSite: "Strict",
             path: "/",
         });
-        toast.success("Logout successfully");
+        // toast.success("Logout successfully");
+        // Example with standard success styling
+        toast.success("Logout successfully", {
+            className: "toast-maroon",
+        });
         await persistor.flush();
         await persistor.purge();
         navigate('/');

@@ -2,16 +2,16 @@
 @import "tailwindcss";
 
 body {
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 
 html {
-    scrollbar-gutter: stable;
+  scrollbar-gutter: stable;
 }
 
-.authBgImage{
-    background-image: url('../public/images/authpage.png');
+.authBgImage {
+  background-image: url('../public/images/authpage.png');
 }
 
 
@@ -32,4 +32,14 @@ body {
 /* Prevent layout shift */
 .skiptranslate {
   display: none !important;
+}
+
+.toast-maroon {
+  background-color: #85002b !important;
+  color: #ffffff !important;
+  --toastify-icon-color-success: #ffffff; 
+}
+
+.toast-maroon .Toastify__progress-bar {
+  background: #ffffff !important;
 }
