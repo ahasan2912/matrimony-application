@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     ChevronLeft,
     ChevronRight,
@@ -24,25 +24,32 @@ import { useGetSwipFeedDataQuery, useHandleClickCandidateReactionMutation } from
 import Conversation from './components/Conversation';
 
 const EMPTY_CARDS = [];
-const CURSOR_STORAGE_KEY = 'cursor';
+const FEED_RESUME_STORAGE_KEY = 'swipeFeedResume';
 
-const getStoredCursor = () => {
+// Resume storage keeps the exact visible profile stable across browser reloads.
+const getStoredResume = () => {
     if (typeof window === 'undefined') {
         return null;
     }
 
-    return localStorage.getItem(CURSOR_STORAGE_KEY);
+    try {
+        const value = localStorage.getItem(FEED_RESUME_STORAGE_KEY);
+        return value ? JSON.parse(value) : null;
+    } catch {
+        localStorage.removeItem(FEED_RESUME_STORAGE_KEY);
+        return null;
+    }
 };
 
-const saveStoredCursor = (value) => {
+const saveStoredResume = (value) => {
     if (typeof window === 'undefined') {
         return;
     }
 
     if (value) {
-        localStorage.setItem(CURSOR_STORAGE_KEY, value);
+        localStorage.setItem(FEED_RESUME_STORAGE_KEY, JSON.stringify(value));
     } else {
-        localStorage.removeItem(CURSOR_STORAGE_KEY);
+        localStorage.removeItem(FEED_RESUME_STORAGE_KEY);
     }
 };
 
@@ -119,7 +126,8 @@ const InfoRow = ({ children, icon: RowIcon, active = false }) => (
 );
 
 const Matches = () => {
-    const [cursor, setCursor] = useState(() => getStoredCursor());
+    const [cursor, setCursor] = useState(() => getStoredResume()?.cursor ?? null);
+    const pendingResumeRef = useRef(getStoredResume());
     const [feedState, setFeedState] = useState({ pages: [], currentPageIndex: 0 });
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -131,20 +139,39 @@ const Matches = () => {
         currentData: matchingCandidate,
         isLoading: matchingCandidateLoading,
         isFetching: matchingCandidateFetching,
+        refetch: refetchMatchingCandidate,
     } = useGetSwipFeedDataQuery({ candidateId, cursor, limit }, {
         skip: !candidateId
     });
-    const [handleClickCandidateReaction] = useHandleClickCandidateReactionMutation();
+    const [handleClickCandidateReaction, { isLoading: reactionLoading }] = useHandleClickCandidateReactionMutation();
+    const isFeedBusy = matchingCandidateFetching || reactionLoading;
+
+    // Current profile persistence saves the visible page and card after every move.
+    const persistResumeState = (page, cardIndex) => {
+        const card = page?.cards?.[cardIndex];
+
+        if (!page || !card) {
+            saveStoredResume(null);
+            return;
+        }
+
+        saveStoredResume({
+            cursor: page.cursor,
+            cardIndex,
+            targetCandidateId: getTargetCandidateId(card),
+        });
+    };
 
     useEffect(() => {
         if (!candidateId) {
             return;
         }
 
-        const storedCursor = getStoredCursor();
+        const storedResume = getStoredResume();
 
+        pendingResumeRef.current = storedResume;
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        setCursor(storedCursor);
+        setCursor(storedResume?.cursor ?? null);
         setFeedState({ pages: [], currentPageIndex: 0 });
         setCurrentCardIndex(0);
         setCurrentImageIndex(0);
@@ -163,11 +190,22 @@ const Matches = () => {
             cards: pageData.cards ?? EMPTY_CARDS,
             nextCursor: pageData.nextCursor ?? null,
         };
+        const pendingResume = pendingResumeRef.current;
 
-        if (!pageCursor && pageData.nextCursor && !getStoredCursor()) {
-            saveStoredCursor(pageData.nextCursor);
-        }
+        const restoredByIdIndex = newPage.cards.findIndex(
+            (card) => getTargetCandidateId(card) === pendingResume?.targetCandidateId
+        );
+        const fallbackResumeIndex = Math.min(
+            Math.max(Number(pendingResume?.cardIndex) || 0, 0),
+            Math.max(newPage.cards.length - 1, 0)
+        );
+        const shouldRestoreCard = pendingResume && (pendingResume.cursor ?? null) === pageCursor;
+        // Exact-card restore prefers profile id because index alone can point to the wrong person.
+        const nextCardIndex = shouldRestoreCard
+            ? (restoredByIdIndex !== -1 ? restoredByIdIndex : fallbackResumeIndex)
+            : 0;
 
+        // Feed page save keeps each cursor result available for previous/next navigation.
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setFeedState((prevState) => {
             const existingPageIndex = prevState.pages.findIndex((page) => page.cursor === pageCursor);
@@ -186,8 +224,10 @@ const Matches = () => {
                 currentPageIndex: prevState.pages.length,
             };
         });
-        setCurrentCardIndex(0);
+        setCurrentCardIndex(nextCardIndex);
         setCurrentImageIndex(0);
+        pendingResumeRef.current = null;
+        persistResumeState(newPage, nextCardIndex);
     }, [matchingCandidate, cursor]);
 
     if (isLoading || matchingCandidateLoading) {
@@ -233,8 +273,7 @@ const Matches = () => {
         currentCard?.isVerified || currentCard?.verified || currentCard?.verificationStatus
     );
     const hasLoadedNextPage = currentPageIndex < feedPages.length - 1;
-    const hasNextCursor = Boolean(currentPage?.nextCursor);
-    const hasNextCard = safeCardIndex < cards.length - 1 || hasLoadedNextPage || hasNextCursor;
+    const canMoveForward = Boolean(currentPage && cards.length);
     const hasPreviousCard = safeCardIndex > 0 || currentPageIndex > 0;
     const profileHighlights = [
         age ? `${age} years old` : '',
@@ -268,24 +307,45 @@ const Matches = () => {
         setCurrentImageIndex((prev) => (prev === 0 ? profileImages.length - 1 : prev - 1));
     };
 
-    const showNextCandidate = () => {
-        if (!hasNextCard || matchingCandidateFetching) {
+    // End-of-feed restart clears cursor and asks the feed API for the first page again.
+    const restartFeed = () => {
+        saveStoredResume(null);
+        pendingResumeRef.current = null;
+        setFeedState({ pages: [], currentPageIndex: 0 });
+        setCurrentCardIndex(0);
+        setCurrentImageIndex(0);
+
+        if (cursor) {
+            setCursor(null);
+            return;
+        }
+
+        refetchMatchingCandidate();
+    };
+
+    // One movement path controls skip and the auto-advance after successful reactions.
+    const goToNextProfile = () => {
+        if (!canMoveForward || isFeedBusy) {
             return;
         }
 
         if (safeCardIndex < cards.length - 1) {
-            setCurrentCardIndex(safeCardIndex + 1);
+            const nextCardIndex = safeCardIndex + 1;
+
+            persistResumeState(currentPage, nextCardIndex);
+            setCurrentCardIndex(nextCardIndex);
             setCurrentImageIndex(0);
             return;
         }
 
         if (hasLoadedNextPage) {
+            const nextPageIndex = currentPageIndex + 1;
             const nextLoadedPage = feedPages[currentPageIndex + 1];
 
-            saveStoredCursor(nextLoadedPage?.cursor ?? null);
+            persistResumeState(nextLoadedPage, 0);
             setFeedState((prevState) => ({
                 ...prevState,
-                currentPageIndex: currentPageIndex + 1,
+                currentPageIndex: nextPageIndex,
             }));
             setCurrentCardIndex(0);
             setCurrentImageIndex(0);
@@ -293,9 +353,12 @@ const Matches = () => {
         }
 
         if (currentPage?.nextCursor) {
-            saveStoredCursor(currentPage.nextCursor);
-            setCursor(getStoredCursor());
+            pendingResumeRef.current = null;
+            setCursor(currentPage.nextCursor);
+            return;
         }
+
+        restartFeed();
     };
 
     const showPreviousCandidate = () => {
@@ -304,39 +367,44 @@ const Matches = () => {
         }
 
         if (safeCardIndex > 0) {
-            setCurrentCardIndex(safeCardIndex - 1);
+            const previousCardIndex = safeCardIndex - 1;
+
+            persistResumeState(currentPage, previousCardIndex);
+            setCurrentCardIndex(previousCardIndex);
             setCurrentImageIndex(0);
             return;
         }
 
         const previousPageIndex = currentPageIndex - 1;
         const previousPageCards = feedPages[previousPageIndex]?.cards ?? EMPTY_CARDS;
-        const previousPageCursor = feedPages[previousPageIndex]?.cursor ?? null;
+        const previousPage = feedPages[previousPageIndex];
+        const previousCardIndex = Math.max(previousPageCards.length - 1, 0);
 
-        saveStoredCursor(previousPageCursor);
+        persistResumeState(previousPage, previousCardIndex);
         setFeedState((prevState) => ({
             ...prevState,
             currentPageIndex: previousPageIndex,
         }));
-        setCurrentCardIndex(Math.max(previousPageCards.length - 1, 0));
+        setCurrentCardIndex(previousCardIndex);
         setCurrentImageIndex(0);
     };
 
-    const handleCandidateReaction = (reaction) => {
-        if (reaction === 'SUPER_LIKE') {
-            handleClickCandidateReaction({
-                "candidateId": candidateId,
-                "targetCandidateId": targetCandidateId,
-                "type": reaction,
-                "source": "FEED"
-            });
-        } else if (reaction === 'LIKE') {
-            handleClickCandidateReaction({
-                "candidateId": candidateId,
-                "targetCandidateId": targetCandidateId,
-                "type": reaction,
-                "source": "FEED"
-            });
+    // Reactions submit first, then auto-advance exactly like a swipe.
+    const handleCandidateReaction = async (reaction) => {
+        if (!targetCandidateId || isFeedBusy) {
+            return;
+        }
+
+        try {
+            await handleClickCandidateReaction({
+                candidateId,
+                targetCandidateId,
+                type: reaction,
+                source: "FEED"
+            }).unwrap();
+            goToNextProfile();
+        } catch (error) {
+            console.error('Failed to submit candidate reaction:', error);
         }
     }
 
@@ -434,28 +502,28 @@ const Matches = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={showNextCandidate}
-                                disabled={!hasNextCard || matchingCandidateFetching}
+                                onClick={goToNextProfile}
+                                disabled={!canMoveForward || isFeedBusy}
                                 aria-label="Show next candidate"
-                                className={`size-14 rounded-lg bg-white/10 text-[#FF3D73] flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors ${hasNextCard && !matchingCandidateFetching ? 'cursor-pointer hover:bg-white/20' : 'cursor-not-allowed opacity-45'}`}
+                                className={`size-14 rounded-lg bg-white/10 text-[#FF3D73] flex items-center justify-center border border-white/10 backdrop-blur-md transition-colors ${canMoveForward && !isFeedBusy ? 'cursor-pointer hover:bg-white/20' : 'cursor-not-allowed opacity-45'}`}
                             >
                                 <X size={31} strokeWidth={3} />
                             </button>
                             <button
                                 type="button"
                                 onClick={() => handleCandidateReaction('LIKE')}
-                                disabled={!targetCandidateId}
+                                disabled={!targetCandidateId || isFeedBusy}
                                 aria-label={`Like ${name}`}
-                                className={`size-14 rounded-lg bg-[#C2004D] text-white flex items-center justify-center shadow-[0_14px_32px_rgba(194,0,77,0.3)] transition-colors hover:bg-[#A90043] ${targetCandidateId ? 'cursor-pointer' : 'cursor-not-allowed opacity-45'}`}
+                                className={`size-14 rounded-lg bg-[#C2004D] text-white flex items-center justify-center shadow-[0_14px_32px_rgba(194,0,77,0.3)] transition-colors hover:bg-[#A90043] ${targetCandidateId && !isFeedBusy ? 'cursor-pointer' : 'cursor-not-allowed opacity-45'}`}
                             >
                                 <Heart size={31} fill="currentColor" />
                             </button>
                             <button
                                 type="button"
                                 onClick={() => handleCandidateReaction('SUPER_LIKE')}
-                                disabled={!targetCandidateId}
+                                disabled={!targetCandidateId || isFeedBusy}
                                 aria-label={`Super like ${name}`}
-                                className={`size-12 rounded-lg bg-[#289ac7] text-white flex items-center justify-center shadow-[0_14px_32px_rgba(40,154,199,0.3)] transition-colors hover:bg-[#4eb5dd] ${targetCandidateId ? 'cursor-pointer' : 'cursor-not-allowed opacity-45'}`}
+                                className={`size-12 rounded-lg bg-[#289ac7] text-white flex items-center justify-center shadow-[0_14px_32px_rgba(40,154,199,0.3)] transition-colors hover:bg-[#4eb5dd] ${targetCandidateId && !isFeedBusy ? 'cursor-pointer' : 'cursor-not-allowed opacity-45'}`}
                             >
                                 <Star size={25} fill="currentColor" />
                             </button>
