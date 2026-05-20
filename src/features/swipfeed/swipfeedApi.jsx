@@ -4,7 +4,7 @@ export const swipfeedApi = apiSlice.injectEndpoints({
 
     endpoints: (builder) => ({
         getSwipFeedData: builder.query({
-            query: ({ candidateId, cursor, limit}) => {
+            query: ({ candidateId, cursor, limit }) => {
                 const params = new URLSearchParams();
 
                 params.append("candidateId", candidateId);
@@ -21,6 +21,21 @@ export const swipfeedApi = apiSlice.injectEndpoints({
                 };
             },
         }),
+        getNearbyMatches: builder.query({
+            query: ({ radiusKm = 25, page = 1, limit = 20 }) => {
+                const params = new URLSearchParams();
+
+                params.append("radiusKm", radiusKm);
+                params.append("page", page);
+                params.append("limit", limit);
+
+                return {
+                    url: `/swipes/nearby-matches?${params.toString()}`,
+                    method: "GET",
+                    credentials: "include",
+                };
+            },
+        }),
         handleClickCandidateReaction: builder.mutation({
             query: (data) => ({
                 url: "/swipes/action",
@@ -32,5 +47,9 @@ export const swipfeedApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useGetSwipFeedDataQuery, useHandleClickCandidateReactionMutation } = swipfeedApi;
+export const {
+    useGetSwipFeedDataQuery,
+    useGetNearbyMatchesQuery,
+    useHandleClickCandidateReactionMutation,
+} = swipfeedApi;
 
