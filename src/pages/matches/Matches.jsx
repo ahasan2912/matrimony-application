@@ -25,6 +25,7 @@ import Conversation from './components/Conversation';
 
 const EMPTY_CARDS = [];
 const FEED_RESUME_STORAGE_KEY = 'swipeFeedResume';
+const EMPTY_STATE_CLASS = 'min-h-[calc(100vh-423px)] px-4 py-12 text-center flex flex-col items-center justify-center';
 
 // Resume storage keeps the exact visible profile stable across browser reloads.
 const getStoredResume = () => {
@@ -239,7 +240,7 @@ const Matches = () => {
     const cards = currentPage?.cards ?? EMPTY_CARDS;
     if (!candidateId) {
         return (
-            <div className="max-w-7xl mx-auto bg-white rounded-[20px] my-12.5 px-4 py-12 text-center">
+            <div className={EMPTY_STATE_CLASS}>
                 <h2 className="text-2xl font-semibold text-[#58001C]">Create your candidate profile first</h2>
                 <p className="text-[#737373] mt-2">Matches will appear here after your profile is ready.</p>
             </div>
@@ -248,7 +249,7 @@ const Matches = () => {
 
     if (!cards.length) {
         return (
-            <div className="max-w-7xl mx-auto bg-white rounded-[20px] my-12.5 px-4 py-12 text-center flex flex-col items-center justify-center min-h-[calc(100vh-510px)]">
+            <div className={EMPTY_STATE_CLASS}>
                 <h2 className="text-2xl font-semibold text-[#58001C]">No matches found</h2>
                 <p className="text-[#737373] mt-2">Your matching feed is empty right now.</p>
             </div>
