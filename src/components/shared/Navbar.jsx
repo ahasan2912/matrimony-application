@@ -20,7 +20,7 @@ const Navbar = () => {
     // };
 
     const navLinks = [
-        { name: 'Mathces', href: '/metches' },
+        { name: 'Mathces', href: '/matches' },
         { name: 'Discover', href: '/discover' },
         { name: 'Chat', href: '/chatlist' },
         { name: 'Marriage Counselling', href: '/marriageCounselling' },
@@ -48,7 +48,7 @@ const Navbar = () => {
         <nav ref={menuRef} className="bg-[#FFF1F3] py-2 shadow-sm sticky top-0 z-40 notranslate">
             <div className="max-w-7xl mx-auto flex items-center px-4 justify-between relative">
                 <div className="max-w-23">
-                    <Link to='/metches' className="max-w-23">
+                    <Link to='/matches' className="max-w-23">
                         <img src={images.logo} className='w-full h-fit' alt="applicaiton_logo" />
                     </Link>
                 </div>

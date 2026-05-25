@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { images } from '../../../../public/image';
-import Like from './Like';
+import Like from '../components/Like';
 
 const Interactions = ({ profiles }) => {
     const [activeInstractionTab, setActiveInstractionTab] = useState('Visitors');

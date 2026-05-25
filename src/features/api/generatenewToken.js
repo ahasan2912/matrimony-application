@@ -20,8 +20,6 @@ export const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
                     secure: false,
                     sameSite: "Strict",
                 });
-            } else {
-                console("");
             }
         }
     return result;

@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="bg-[#FFF0F3] px-4 py-12 md:px-16 lg:px-24">
                 <div className="max-w-7xl mx-auto">
                     <div className="max-w-23">
-                        <Link to='/metches' className="max-w-23">
+                        <Link to='/matches' className="max-w-23">
                             <img src={images.logo} className='w-full h-fit' alt="applicaiton_logo" />
                         </Link>
                     </div>

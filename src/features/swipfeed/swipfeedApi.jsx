@@ -22,7 +22,7 @@ export const swipfeedApi = apiSlice.injectEndpoints({
             },
         }),
         getNearbyMatches: builder.query({
-            query: ({ radiusKm = 25, page = 1, limit = 20 }) => {
+            query: ({ radiusKm = 50, page = 1, limit = 20 }) => {
                 const params = new URLSearchParams();
 
                 params.append("radiusKm", radiusKm);

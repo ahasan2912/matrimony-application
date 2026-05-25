@@ -18,7 +18,7 @@ const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: baseQueryWithErrorHandling,
     // baseQuery: baseQuery,
-    tagTypes: ["candidates"],
+    tagTypes: [],
     endpoints: () => ({}),
 });
 

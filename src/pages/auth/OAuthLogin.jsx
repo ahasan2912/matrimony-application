@@ -29,7 +29,7 @@ const OAuthLogin = () => {
         if (!user) return;
 
         if (user) {
-            navigate("/phonenumber");
+            navigate("/matches");
         }
 
     }, [user, navigate]);

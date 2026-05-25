@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Heart, MessageCircle, Send, ShieldCheck, X } from "lucide-react";
+import { useSelector } from "react-redux";
+import { useMessageRequestMutation } from "../../../features/conversation/conversationRequestApi";
+import { toast } from "react-toastify";
 
 const defaultMessage = "Assalamu Alaikum, I liked your profile and would be happy to get to know you better.";
 
-const Conversation = ({ candidate, image, onClose, onCreate }) => {
+const Conversation = ({ candidate, image, onClose, targetCandidateId }) => {
   const {
     register,
     handleSubmit,
@@ -17,11 +20,13 @@ const Conversation = ({ candidate, image, onClose, onCreate }) => {
     },
   });
 
+  const { user } = useSelector((state) => state.auth);
   const candidateName = candidate?.name || "this match";
   const candidateAge = candidate?.age ? `, ${candidate.age}` : "";
   const matchScore = Number(candidate?.matchScore);
   const formattedMatchScore = Number.isFinite(matchScore) ? `${Math.round(matchScore)}% match` : "Matched profile";
   const candidateImage = image || candidate?.images?.[0];
+  const [messageRequest, { isLoading }] = useMessageRequestMutation();
   const quickMessages = [
     defaultMessage,
     `Hi ${candidateName}, your profile caught my attention. Would you like to talk?`,
@@ -51,17 +56,23 @@ const Conversation = ({ candidate, image, onClose, onCreate }) => {
     onClose?.();
   };
 
-  const onSubmit = (data) => {
-    onCreate?.({
-      ...data,
-      candidateId: candidate?.targetCandidateId || candidate?.candidateId || candidate?._id || candidate?.id,
-    });
-    console.log(data);
-    reset();
-    onClose?.();
-  };
+  const onSubmit = async (data) => {
+    const payload = {
+      requesterCandidateId: user?.candidateLink?.candidateId,
+      targetCandidateId,
+      firstMessage: data?.message,
+    };
 
-  console.log(candidate);
+    const res = await messageRequest(payload);
+
+    if (res?.data?.success) {
+      toast.success("Message sent successfully!");
+      reset();
+      onClose?.();
+    } else {
+      toast.error(res?.error?.data?.message || "Failed to send message!");
+    }
+  };
 
   return (
     <div
@@ -157,14 +168,28 @@ const Conversation = ({ candidate, image, onClose, onCreate }) => {
             <button
               type="button"
               onClick={handleClose}
-              className="inline-flex h-11 items-center justify-center rounded-lg border border-[#E7DDE1] bg-white px-5 text-sm font-semibold text-[#58001C] transition-colors hover:bg-[#FFF5F8]">
+              className="inline-flex h-11 items-center justify-center rounded-lg border border-[#E7DDE1] bg-white px-5 text-sm font-semibold text-[#58001C] transition-colors hover:bg-[#FFF5F8] cursor-pointer">
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#C2004D] px-5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(194,0,77,0.25)] transition-colors hover:bg-[#A90043]">
-              Send request
-              <Send size={17} />
+              disabled={isLoading}
+              className={`inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold text-white transition-all duration-300 shadow-lg cursor-pointer
+              ${isLoading
+                  ? "bg-pink-500 cursor-not-allowed opacity-80"
+                  : "bg-[#C2004D] hover:bg-[#A90043] hover:shadow-[0_12px_26px_rgba(194,0,77,0.35)] active:scale-[0.98]"
+                }`}>
+              {isLoading ? (
+                <>
+                  <span className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Send Message...
+                </>
+              ) : (
+                <>
+                  Send Message
+                  <Send size={17} />
+                </>
+              )}
             </button>
           </div>
         </form>

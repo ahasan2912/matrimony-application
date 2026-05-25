@@ -73,7 +73,7 @@ const router = createBrowserRouter([
                 element: <VerificationComplete />
             },
             {
-                path: "/metches",
+                path: "/matches",
                 element: <Matches />
             },
             {

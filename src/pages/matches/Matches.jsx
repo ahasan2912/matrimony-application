@@ -469,16 +469,6 @@ const Matches = () => {
                             </div>
 
                             <div className="flex flex-wrap gap-2 mt-3">
-                                {/* {gender && (
-                                    <div className="bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-medium text-white flex items-center gap-1 w-fit">
-                                        <UserRound size={13} /> {gender}
-                                    </div>
-                                )}
-                                {religion && (
-                                    <div className="bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-medium text-white flex items-center gap-1 w-fit">
-                                        <Moon size={13} /> {religion}
-                                    </div>
-                                )} */}
                                 {livesIn && (
                                     <div className="bg-[#6b6565] backdrop-blur-md px-3 py-1.5 mt-3 rounded-full text-xs font-medium text-white flex items-center gap-1 w-fit">
                                         <MapPin size={13} /> <span>{livesIn}</span>
@@ -540,6 +530,7 @@ const Matches = () => {
                         candidate={currentCard}
                         image={currentImage}
                         onClose={() => setConversation(false)}
+                        targetCandidateId={targetCandidateId}
                     />
                 )}
 
