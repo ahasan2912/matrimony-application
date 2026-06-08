@@ -29,6 +29,7 @@ import OAuthLogin from "../pages/auth/OAuthLogin";
 import ErrorPage from "../pages/ErrorPage";
 import VideoCamera from "../pages/VideoCamera";
 import PrivateRoute from "./PrivateRoute";
+import LogIn from "../pages/auth/LogIn";
 
 const router = createBrowserRouter([
     {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <Home />,
+            },
+            {
+                path: "/login",
+                element: <LogIn/>
             },
             {
                 path: "/oauthlogin",
@@ -74,7 +79,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/matches",
-                element: <Matches />
+                element: <PrivateRoute><Matches /></PrivateRoute>
             },
             {
                 path: "/discover",

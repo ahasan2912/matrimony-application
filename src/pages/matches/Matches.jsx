@@ -22,87 +22,22 @@ import { useGetMyCandidateDataQuery } from '../../features/candidates/candidates
 import ProfileDetailsSkeleton from '../../components/loading- skeletons/ProfileDetailsSkeleton';
 import { useGetSwipFeedDataQuery, useHandleClickCandidateReactionMutation } from '../../features/swipfeed/swipfeedApi';
 import Conversation from './components/Conversation';
-
-const EMPTY_CARDS = [];
-const FEED_RESUME_STORAGE_KEY = 'swipeFeedResume';
-const EMPTY_STATE_CLASS = 'min-h-[calc(100vh-423px)] px-4 py-12 text-center flex flex-col items-center justify-center';
-
-// Resume storage keeps the exact visible profile stable across browser reloads.
-const getStoredResume = () => {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    try {
-        const value = localStorage.getItem(FEED_RESUME_STORAGE_KEY);
-        return value ? JSON.parse(value) : null;
-    } catch {
-        localStorage.removeItem(FEED_RESUME_STORAGE_KEY);
-        return null;
-    }
-};
-
-const saveStoredResume = (value) => {
-    if (typeof window === 'undefined') {
-        return;
-    }
-
-    if (value) {
-        localStorage.setItem(FEED_RESUME_STORAGE_KEY, JSON.stringify(value));
-    } else {
-        localStorage.removeItem(FEED_RESUME_STORAGE_KEY);
-    }
-};
-
-const normalizeArray = (value) => {
-    if (Array.isArray(value)) {
-        return value.filter(Boolean);
-    }
-
-    return value ? [value] : [];
-};
-
-const formatLabel = (value) => {
-    if (!value) {
-        return '';
-    }
-
-    return String(value)
-        .replace(/_/g, ' ')
-        .toLowerCase()
-        .replace(/\b\w/g, (letter) => letter.toUpperCase());
-};
-
-const formatDistance = (distanceKm) => {
-    const distance = Number(distanceKm);
-
-    return Number.isFinite(distance) ? `${distance.toFixed(1)} km away` : '';
-};
-
-const formatMatchScore = (matchScore) => {
-    const score = Number(matchScore);
-
-    return Number.isFinite(score) ? `${Math.round(score)}% match` : '';
-};
-
-const getLabeledItems = (labeledItems, rawItems) => {
-    const labels = normalizeArray(labeledItems);
-
-    if (labels.length) {
-        return labels;
-    }
-
-    return normalizeArray(rawItems).map(formatLabel).filter(Boolean);
-};
-
-const getTargetCandidateId = (card) => (
-    card?.targetCandidateId
-    || card?.candidateId
-    || card?.candidate?._id
-    || card?.candidate?.id
-    || card?._id
-    || card?.id
-);
+import {
+    EMPTY_CARDS,
+    EMPTY_STATE_CLASS,
+    formatDistance,
+    formatLabel,
+    formatMatchScore,
+    getAboutText,
+    getLabeledItems,
+    getResumeCardIndex,
+    getStoredResume,
+    getTargetCandidateId,
+    persistResumeState,
+    saveStoredResume,
+    normalizeArray,
+} from './utils';
+import { useSelector } from 'react-redux';
 
 const DetailTitle = ({ children }) => (
     <h3 className="text-[22px] font-semibold text-[#9e133f]">
@@ -127,15 +62,19 @@ const InfoRow = ({ children, icon: RowIcon, active = false }) => (
 );
 
 const Matches = () => {
+    const {user} = useSelector(state => state?.auth);
+    console.log(user);
+
     const [cursor, setCursor] = useState(() => getStoredResume()?.cursor ?? null);
     const pendingResumeRef = useRef(getStoredResume());
     const [feedState, setFeedState] = useState({ pages: [], currentPageIndex: 0 });
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [isConversation, setConversation] = useState(false);
+    const [isRestarting, setIsRestarting] = useState(false);
     const { data: candidateData, isLoading } = useGetMyCandidateDataQuery();
     const candidateId = candidateData?.data?.candidate?._id;
-    const limit = 2;
+    const limit = 10;
     const {
         currentData: matchingCandidate,
         isLoading: matchingCandidateLoading,
@@ -146,22 +85,6 @@ const Matches = () => {
     });
     const [handleClickCandidateReaction, { isLoading: reactionLoading }] = useHandleClickCandidateReactionMutation();
     const isFeedBusy = matchingCandidateFetching || reactionLoading;
-
-    // Current profile persistence saves the visible page and card after every move.
-    const persistResumeState = (page, cardIndex) => {
-        const card = page?.cards?.[cardIndex];
-
-        if (!page || !card) {
-            saveStoredResume(null);
-            return;
-        }
-
-        saveStoredResume({
-            cursor: page.cursor,
-            cardIndex,
-            targetCandidateId: getTargetCandidateId(card),
-        });
-    };
 
     useEffect(() => {
         if (!candidateId) {
@@ -192,19 +115,7 @@ const Matches = () => {
             nextCursor: pageData.nextCursor ?? null,
         };
         const pendingResume = pendingResumeRef.current;
-
-        const restoredByIdIndex = newPage.cards.findIndex(
-            (card) => getTargetCandidateId(card) === pendingResume?.targetCandidateId
-        );
-        const fallbackResumeIndex = Math.min(
-            Math.max(Number(pendingResume?.cardIndex) || 0, 0),
-            Math.max(newPage.cards.length - 1, 0)
-        );
-        const shouldRestoreCard = pendingResume && (pendingResume.cursor ?? null) === pageCursor;
-        // Exact-card restore prefers profile id because index alone can point to the wrong person.
-        const nextCardIndex = shouldRestoreCard
-            ? (restoredByIdIndex !== -1 ? restoredByIdIndex : fallbackResumeIndex)
-            : 0;
+        const nextCardIndex = getResumeCardIndex(newPage, pendingResume, pageCursor);
 
         // Feed page save keeps each cursor result available for previous/next navigation.
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -229,9 +140,10 @@ const Matches = () => {
         setCurrentImageIndex(0);
         pendingResumeRef.current = null;
         persistResumeState(newPage, nextCardIndex);
+        setIsRestarting(false);
     }, [matchingCandidate, cursor]);
 
-    if (isLoading || matchingCandidateLoading) {
+    if (isLoading || matchingCandidateLoading || isRestarting) {
         return <ProfileDetailsSkeleton />
     }
 
@@ -287,10 +199,7 @@ const Matches = () => {
         distance,
         livesIn ? `Lives in ${livesIn}` : '',
     ].filter(Boolean);
-    const aboutText = currentCard?.aboutMe
-        || currentCard?.about
-        || currentCard?.bio
-        || `${name}${age ? ` is ${age} years old` : ''}${livesIn ? ` and lives in ${livesIn}` : ''}${religion ? `. Religion: ${religion}` : ''}${matchScore ? `. ${matchScore}.` : '.'}`;
+    const aboutText = getAboutText({ name, age, livesIn, religion, matchScore, card: currentCard });
 
     const nextImage = () => {
         if (profileImages.length <= 1) {
@@ -315,6 +224,7 @@ const Matches = () => {
         setFeedState({ pages: [], currentPageIndex: 0 });
         setCurrentCardIndex(0);
         setCurrentImageIndex(0);
+        setIsRestarting(true);
 
         if (cursor) {
             setCursor(null);
@@ -559,7 +469,7 @@ const Matches = () => {
                             <div className="mt-3">
                                 {matchDetails.length ? (
                                     matchDetails.map((item) => (
-                                        <InfoRow key={item} icon={item === matchScore ? Percent : MapPin} active={item === matchScore}>
+                                        <InfoRow key={item} icon={item === matchScore ? '' : MapPin} active={item === matchScore}>
                                             {item}
                                         </InfoRow>
                                     ))

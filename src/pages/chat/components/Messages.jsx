@@ -1,15 +1,29 @@
+import { useSelector } from "react-redux";
+import { useConversationListQuery } from "../../../features/conversation/conversation";
+import { timeAgo } from "./utility";
 
-const Messages = ({ messageData }) => {
+const Messages = () => {
+    const { user } = useSelector(state => state?.auth);
+    const candidateId = user?.candidateLink?.candidateId;
+
+    const { data: conversationData, isLoading } = useConversationListQuery(candidateId, {
+        skip: !candidateId,
+    });
+
+    if (isLoading) {
+        return <p>Loading......</p>
+    }
+
     return (
         <div className="divide-y divide-gray-200 overflow-x-auto max-w-full">
-            {messageData.map((msg, index) => (
+            {conversationData?.data?.conversations?.map((msg) => (
                 <div
-                    key={index}
+                    key={msg?._id}
                     className="flex items-center px-2 py-3 hover:bg-gray-100 cursor-pointer transition-colors gap-2">
                     {/* LEFT SIDE */}
                     <div className="flex items-center gap-1.5 flex-1 min-w-0">
                         <img
-                            src="https://t4.ftcdn.net/jpg/09/75/07/11/360_F_975071103_e99E3iSot86QtdT8vRJUyTOYao83XxRB.jpg"
+                            src={msg?.opponent?.image}
                             alt={msg.name}
                             className="w-14 h-14 rounded-full object-cover shrink-0"
                         />
@@ -17,7 +31,7 @@ const Messages = ({ messageData }) => {
                         <div className="min-w-0">
                             <div className="flex items-center gap-2">
                                 <h3 className="font-semibold text-gray-800 truncate">
-                                    {msg.name}
+                                    {msg?.opponent?.name}
                                 </h3>
 
                                 {msg.unread > 0 && (
@@ -27,19 +41,21 @@ const Messages = ({ messageData }) => {
                                 )}
                             </div>
 
-                            <p
-                                className={`text-sm truncate ${msg.unread > 0
+                            {
+                                msg?.lastMessage?.message ? <p
+                                    className={`text-sm truncate ${msg.unread > 0
                                         ? "text-gray-900 font-bold"
                                         : "text-gray-500"
-                                    }`}>
-                                {msg.text}
-                            </p>
+                                        }`}>
+                                    {msg?.lastMessage?.message}
+                                </p> : <p className="text-gray-500 text-sm">No messages yet</p>
+                            }
                         </div>
                     </div>
 
                     {/* RIGHT SIDE (ALWAYS RIGHT) */}
                     <span className="text-xs sm:text-sm text-gray-400 font-medium whitespace-nowrap">
-                        {msg.time}m ago
+                        {timeAgo(msg?.lastMessage?.createdAt)}
                     </span>
                 </div>
             ))}

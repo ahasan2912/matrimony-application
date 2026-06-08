@@ -9,14 +9,13 @@ const ChatList = () => {
 
     const messageData = [
         { id: 1, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '5', unread: 0 },
-        { id: 2, name: 'Sadia Hossain', text: 'New Messages', time: '15', unread: 2 },
-        { id: 3, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '10', unread: 0 },
-        { id: 4, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '15', unread: 0 },
-        { id: 5, name: 'Sadia Hossain', text: 'New Messages', time: '25', unread: 2 },
-        { id: 6, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '20', unread: 0 },
     ];
 
     const tabs = ['Messages', 'Matches', 'Requests'];
+
+    console.log(activeTab);
+    console.log(messageData);
+
     return (
         <div className="max-w-7xl mx-auto min-h-screen flex px-3 pt-3 sm:pt-5">
             <div className="w-full bg-white rounded-xl">
@@ -46,9 +45,9 @@ const ChatList = () => {
                     </div>
                 </div>
                 <div className="pt-2">
-                    {activeTab === 'Messages' && <Messages messageData={messageData} setActiveTab={setActiveTab} />}
+                    {activeTab === 'Messages' && <Messages />}
                     {activeTab === 'Matches' && <Matches messageData={messageData} />}
-                    {activeTab === 'Requests' && <Requests messageData={messageData} setActiveTab={setActiveTab}/>}
+                    {activeTab === 'Requests' && <Requests messageData={messageData} setActiveTab={setActiveTab} />}
                 </div>
             </div>
         </div>
