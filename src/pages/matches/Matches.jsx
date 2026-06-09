@@ -72,6 +72,7 @@ const Matches = () => {
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [isConversation, setConversation] = useState(false);
     const [isRestarting, setIsRestarting] = useState(false);
+    const [reactionFlash, setReactionFlash] = useState(null); // 'LIKE' | 'SUPER_LIKE' | null
     const { data: candidateData, isLoading } = useGetMyCandidateDataQuery();
     const candidateId = candidateData?.data?.candidate?._id;
     const limit = 10;
@@ -313,6 +314,9 @@ const Matches = () => {
                 type: reaction,
                 source: "FEED"
             }).unwrap();
+            // Show flash animation on success
+            setReactionFlash(reaction);
+            setTimeout(() => setReactionFlash(null), 900);
             goToNextProfile();
         } catch (error) {
             console.error('Failed to submit candidate reaction:', error);
@@ -331,6 +335,38 @@ const Matches = () => {
                             src={currentImage}
                             alt={name}
                             className="w-full h-full object-cover transition-all duration-500" />
+
+                        {/* Reaction flash overlay */}
+                        {reactionFlash && (
+                            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none">
+                                <div
+                                    className="flex flex-col items-center gap-3 animate-reaction-pop"
+                                    style={{
+                                        animation: 'reactionPop 0.9s ease-out forwards',
+                                    }}
+                                >
+                                    {reactionFlash === 'LIKE' ? (
+                                        <>
+                                            <div className="rounded-full bg-[#C2004D]/90 backdrop-blur-sm p-6 shadow-[0_0_60px_rgba(194,0,77,0.6)]">
+                                                <Heart size={72} fill="white" className="text-white drop-shadow-lg" />
+                                            </div>
+                                            <span className="text-white text-2xl font-bold tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                                                Liked! 💖
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="rounded-full bg-[#289ac7]/90 backdrop-blur-sm p-6 shadow-[0_0_60px_rgba(40,154,199,0.6)]">
+                                                <Star size={72} fill="white" className="text-white drop-shadow-lg" />
+                                            </div>
+                                            <span className="text-white text-2xl font-bold tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                                                Super Liked! ⭐
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         <div className="absolute inset-x-0 top-0 z-10 h-24 bg-linear-to-b from-black/55 to-transparent" />
 

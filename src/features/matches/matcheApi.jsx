@@ -10,7 +10,15 @@ export const matchesApi = apiSlice.injectEndpoints({
                 credentials: "include",
             }),
         }),
+        sendHIMessage: builder.mutation({
+            query: (data) => ({
+                url: "/messages",
+                method: "POST",
+                body: data,
+                credentials: "include",
+            }),
+        }),
     }),
 });
 
-export const {useMatchesListQuery} = matchesApi;
+export const { useMatchesListQuery, useSendHIMessageMutation } = matchesApi;
