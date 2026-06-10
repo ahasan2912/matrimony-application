@@ -30,6 +30,7 @@ import ErrorPage from "../pages/ErrorPage";
 import VideoCamera from "../pages/VideoCamera";
 import PrivateRoute from "./PrivateRoute";
 import LogIn from "../pages/auth/LogIn";
+import MessageBox from "../pages/chat/components/chating/MessageBox";
 
 const router = createBrowserRouter([
     {
@@ -139,7 +140,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/testing",
-                element: <Testing />
+                element: <MessageBox />
             },
         ],
     },

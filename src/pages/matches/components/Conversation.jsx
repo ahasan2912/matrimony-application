@@ -60,7 +60,7 @@ const Conversation = ({ candidate, image, onClose, targetCandidateId }) => {
     const payload = {
       requesterCandidateId: user?.candidateLink?.candidateId,
       targetCandidateId,
-      firstMessage: data?.message,
+      initialMessage: data?.message,
     };
 
     const res = await messageRequest(payload);

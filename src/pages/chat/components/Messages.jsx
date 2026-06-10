@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useConversationListQuery } from "../../../features/conversation/conversation";
+import { useConversationListQuery } from "../../../features/chat/messageApi";
 import { timeAgo } from "./utility";
 
 const Messages = () => {
@@ -11,7 +11,9 @@ const Messages = () => {
     });
 
     if (isLoading) {
-        return <p>Loading......</p>
+        return <div className="p-4 text-center">
+            <p>Loading...</p>
+        </div>
     }
 
     return (

@@ -1,20 +1,12 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
-import Messages from "./components/Messages";
 import Matches from "./components/Matches";
 import Requests from "./components/Requests";
+import MessageBox from "./components/chating/MessageBox";
 
 const ChatList = () => {
     const [activeTab, setActiveTab] = useState('Messages');
-
-    const messageData = [
-        { id: 1, name: 'Sadia Hossain', text: 'Looking forward to our date!', time: '5', unread: 0 },
-    ];
-
     const tabs = ['Messages', 'Matches', 'Requests'];
-
-    console.log(activeTab);
-    console.log(messageData);
 
     return (
         <div className="max-w-7xl mx-auto min-h-screen flex px-3 pt-3 sm:pt-5">
@@ -45,9 +37,9 @@ const ChatList = () => {
                     </div>
                 </div>
                 <div className="pt-2">
-                    {activeTab === 'Messages' && <Messages />}
-                    {activeTab === 'Matches' && <Matches messageData={messageData} />}
-                    {activeTab === 'Requests' && <Requests messageData={messageData} setActiveTab={setActiveTab} />}
+                    {activeTab === 'Messages' && <MessageBox/>}
+                    {activeTab === 'Matches' && <Matches setActiveTab={setActiveTab}/>}
+                    {activeTab === 'Requests' && <Requests setActiveTab={setActiveTab} />}
                 </div>
             </div>
         </div>
