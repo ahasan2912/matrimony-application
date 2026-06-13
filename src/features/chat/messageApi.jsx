@@ -10,16 +10,27 @@ export const messageApi = apiSlice.injectEndpoints({
                 credentials: "include",
             }),
         }),
-        getMessages: builder.query({
-            query: (conversationId) => ({
-                url: `/messages?conversationId=${conversationId}`,
+        sendMessage: builder.mutation({
+            query: (data) => ({
+                url: "/messages",
+                method: "POST",
+                body: data,
+                credentials: "include",
+            }),
+        }),
+        conversationMessage: builder.query({
+            query: ({ conversationId, candidateId }) => ({
+                url: `/conversations/${conversationId}/messages?candidateId=${candidateId}&limit=50`,
                 method: "GET",
                 credentials: "include",
             }),
         }),
-        sendMessage: builder.mutation({
-            query: (data) => ({
-                url: "/messages",
+        conversationMedia: builder.mutation({
+            query: ({ data, conversationId }) => ({
+                url: `/messages/${conversationId}/media`,
+                headers: {
+                    "Content-Type": "application/formdata"
+                },
                 method: "POST",
                 body: data,
                 credentials: "include",
@@ -30,6 +41,9 @@ export const messageApi = apiSlice.injectEndpoints({
 
 export const {
     useConversationListQuery,
-    useGetMessagesQuery,
     useSendMessageMutation,
+    useConversationMessageQuery,
+    useConversationMediaMutation
 } = messageApi;
+
+// 

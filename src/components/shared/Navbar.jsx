@@ -26,6 +26,7 @@ const Navbar = () => {
         { name: 'Marriage Counselling', href: '/marriageCounselling' },
         { name: 'Verification', href: '/verificationpage' },
         { name: 'Video Camera', href: '/video-camera' },
+        { name: 'Login', href: '/login' },
     ];
 
     useEffect(() => {
